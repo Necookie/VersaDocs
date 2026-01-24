@@ -1,29 +1,31 @@
-
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from '@/components/ui/button';
-import { FileText } from 'lucide-react';
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Navbar() {
+  return (
+    <nav className='flex justify-between items-center p-6 shadow-xl bg-white'>
+      <div className='flex gap-2 ml-20'>
+        <p className = 'text-2xl font-semibold'>VersaDocs</p>
+      </div>
+      
+      <div className="flex items-center gap-6">
+        {/* Only show "Sign In" if logged out */}
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="font-bold hover:text-blue-600">Sign in</button>
+          </SignInButton>
+          <Button asChild>
+            <Link href="/sign-up">Get Started</Link>
+          </Button>
+        </SignedOut>
 
-    return (
-        <main>
-            <nav>
-                <section className = 'flex justify-between p-6 shadow-xl'>
-                    <div className='flex gap-2 ml-20'>
-                    <FileText className='size-10 text-blue-500'/>
-                    <p className = 'text-2xl font-semibold'>VersaDocs</p>
-                    </div>
-                    <div>
-                        <Link href = '#'>Features</Link>
-                        <Link href = '#' className = 'ml-6'>Templates</Link>
-                        <Link href = '#' className = 'ml-6'>Pricing</Link>
-                        <Link href = '#' className = 'ml-6 font-bold'>Sign in</Link>
-                        <Button asChild variant='default' className = 'ml-6'> 
-                        <Link href = '#'>Get Started</Link>
-                        </Button>
-                    </div>
-                </section>
-            </nav>
-        </main>
-    )
+        {/* Only show User Menu if logged in */}
+        <SignedIn>
+          <Link href="/editor" className="text-gray-600 hover:text-black">Editor</Link>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+      </div>
+    </nav>
+  );
 }

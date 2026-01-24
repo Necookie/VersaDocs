@@ -1,7 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Label }  from '@/components/ui/label';
-import { Icon } from '@iconify/react'
+import { FileText } from 'lucide-react';
 import Link from 'next/link'
 
 export default function Navbar() {
@@ -11,7 +10,7 @@ export default function Navbar() {
             <nav>
                 <section className = 'flex justify-between p-6 shadow-xl'>
                     <div className='flex gap-2 ml-20'>
-                    <Icon icon="mdi:file-document-outline" width="40" height="40" className='text-blue-500'/>
+                    <FileText className='size-10 text-blue-500'/>
                     <p className = 'text-2xl font-semibold'>VersaDocs</p>
                     </div>
                     <div>
@@ -19,7 +18,9 @@ export default function Navbar() {
                         <Link href = '#' className = 'ml-6'>Templates</Link>
                         <Link href = '#' className = 'ml-6'>Pricing</Link>
                         <Link href = '#' className = 'ml-6 font-bold'>Sign in</Link>
-                        <Link href = '#'><Button variant='default' className = 'ml-6'>Get Started </Button></Link>
+                        <Button asChild variant='default' className = 'ml-6'> 
+                        <Link href = '#'>Get Started</Link>
+                        </Button>
                     </div>
                 </section>
             </nav>

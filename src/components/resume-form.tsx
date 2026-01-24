@@ -9,17 +9,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ResumeForm() {
   // 1. Setup the form "Brain"
-  // We tell it: "Use the ResumeValues type, and enforce rules with resumeSchema"
-  const form = useForm<ResumeValues>({
+  // We use Zod to validate and type the form data
+  const form = useForm({
     resolver: zodResolver(resumeSchema),
-    defaultValues: {
+    defaultValues: { //default empty values
       personalInfo: {
         fullName: "",
         email: "",
         phone: "",
         linkedin: "",
+        website: "",
+        
       },
-      experience: [], // Start with empty list
+      experience: [], 
+      education: [], 
     },
   });
 

@@ -33,13 +33,13 @@ const educationSchema = z.object({
 export const resumeSchema = z.object({
   personalInfo: z.object({
     fullName: z.string().min(1, "Full name is required"),
-    email: z.string().email("Invalid email address"),
+    email: z.email("Invalid email address"),
     phone: z.string().optional(),
     linkedin: z.string().optional(),
     website: z.string().optional(),
   }),
   summary: z.string().optional(),
-  // We default to an empty array so the form doesn't crash on load
+  // default to empty array for both experience and education
   experience: z.array(experienceSchema).default([]), 
   education: z.array(educationSchema).default([]),
 });

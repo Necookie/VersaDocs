@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Download, LayoutTemplate, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
@@ -64,42 +65,47 @@ export default function Home() {
 
           
           <div className="grid md:grid-cols-3 gap-6">
-            
-            <div className="bg-white border border-gray-200 rounded-xl p-6">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <LayoutTemplate className="size-6 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Multiple Templates
-              </h3>
-              <p className="text-gray-600">
-                Choose from 5+ professional templates designed by experts. Switch templates instantly without losing data.
-              </p>
-            </div>
+            <Card className="bg-white border-gray-200">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <LayoutTemplate className="size-6 text-blue-600" />
+                </div>
+                <CardTitle className="text-xl text-gray-900 mb-2">
+                  Multiple Templates
+                </CardTitle>
+                <CardDescription className="text-base text-gray-600">
+                  Choose from 5+ professional templates designed by experts. Switch templates instantly without losing data.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-6">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Sparkles className="size-6 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                AI Suggestions
-              </h3>
-              <p className="text-gray-600">
-                Get smart suggestions for bullet points and content. Our AI helps you write compelling descriptions.
-              </p>
-            </div>
+            <Card className="bg-white border-gray-200">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                  <Sparkles className="size-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-xl text-gray-900 mb-2">
+                  AI Suggestions
+                </CardTitle>
+                <CardDescription className="text-base text-gray-600">
+                  Get smart suggestions for bullet points and content. Our AI helps you write compelling descriptions.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-6">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                <Download className="size-6 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Export Anywhere
-              </h3>
-              <p className="text-gray-600">
-                Download as PDF, DOCX, or share a link. Your resume looks perfect on any device or platform.
-              </p>
-            </div>
+            <Card className="bg-white border-gray-200">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                  <Download className="size-6 text-green-600" />
+                </div>
+                <CardTitle className="text-xl text-gray-900 mb-2">
+                  Export Anywhere
+                </CardTitle>
+                <CardDescription className="text-base text-gray-600">
+                  Download as PDF, DOCX, or share a link. Your resume looks perfect on any device or platform.
+                </CardDescription>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

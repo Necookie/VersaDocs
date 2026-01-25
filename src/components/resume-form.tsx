@@ -6,6 +6,7 @@ import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export function ResumeForm() {
   // 1. Setup the form "Brain"
@@ -40,43 +41,68 @@ export function ResumeForm() {
       
       {/* LEFT COLUMN: The Editor */}
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            
+        <Accordion type="multiple"  defaultValue={["personal-info"]}>
+          <AccordionItem value="personal-info" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Personal Info</AccordionTrigger>
+          <AccordionContent className="space-y-4">
             {/* FULL NAME INPUT */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Full Name</label>
               <Input 
                 {...form.register("personalInfo.fullName")} 
                 placeholder="John Doe" 
-              />
+                />
               {/* Error Message: Shows up if Zod validation fails */}
               {form.formState.errors.personalInfo?.fullName && (
                 <p className="text-red-500 text-xs">
-                  {form.formState.errors.personalInfo.fullName.message}
+                  {form.formState.errors.personalInfo?.fullName.message}
                 </p>
               )}
             </div>
-
             {/* EMAIL INPUT */}
-            <div className="space-y-2">
+            <div className="space-y-s">
               <label className="text-sm font-medium">Email</label>
               <Input 
                 {...form.register("personalInfo.email")} 
                 placeholder="john@example.com" 
-              />
+                />
               {form.formState.errors.personalInfo?.email && (
                 <p className="text-red-500 text-xs">
-                  {form.formState.errors.personalInfo.email.message}
+                  {form.formState.errors.personalInfo?.email.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Phone</label>
+              <Input {...form.register("personalInfo.phone")} placeholder="(123) 456-7890" />
+              {form.formState.errors.personalInfo?.phone && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.phone.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Linkedin</label>
+              <Input {...form.register("personalInfo.linkedin")} placeholder="linkedin.com/in/username" />
+              {form.formState.errors.personalInfo?.linkedin && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.linkedin.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Website</label>
+              <Input {...form.register("personalInfo.website")} placeholder="https://example.com" />
+              {form.formState.errors.personalInfo?.website && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.website.message}
                 </p>
               )}
             </div>
 
-          </CardContent>
-        </Card>
+          </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
         {/* We will add Experience Section here next */}
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>

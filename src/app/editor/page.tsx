@@ -1,6 +1,6 @@
 import { ResumeForm } from "@/components/resume-form"
-export default function EditorPage() {
 
+export default function EditorPage() {
 
     return (
         <main>

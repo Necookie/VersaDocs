@@ -27,6 +27,12 @@ export function ResumeForm() {
     },
   });
 
+  // Setup useFieldArray for dynamic education entries
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
+    control: form.control,
+    name: "education",
+  });
+
   // 2. Watch the data (so we can see it update live!)
   // This is vital for your <500ms preview requirement later
   const formValues = form.watch();
@@ -102,6 +108,99 @@ export function ResumeForm() {
 
           </AccordionContent>
           </AccordionItem>
+
+          {/* EDUCATION SECTION */}
+          <AccordionItem value="education" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Education</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {educationFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Education {index + 1}</span>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeEducation(index)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Institution</label>
+                    <Input
+                      {...form.register(`education.${index}.institution`)}
+                      placeholder="University name"
+                    />
+                    {form.formState.errors.education?.[index]?.institution && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.education[index]?.institution?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Degree</label>
+                    <Input
+                      {...form.register(`education.${index}.degree`)}
+                      placeholder="Bachelor's, Master's, etc."
+                    />
+                    {form.formState.errors.education?.[index]?.degree && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.education[index]?.degree?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Field of Study</label>
+                    <Input
+                      {...form.register(`education.${index}.fieldOfStudy`)}
+                      placeholder="Computer Science"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Start Date</label>
+                      <Input
+                        {...form.register(`education.${index}.startDate`)}
+                        placeholder="Sep 2019"
+                      />
+                      {form.formState.errors.education?.[index]?.startDate && (
+                        <p className="text-red-500 text-xs">
+                          {form.formState.errors.education[index]?.startDate?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">End Date</label>
+                      <Input
+                        {...form.register(`education.${index}.endDate`)}
+                        placeholder="May 2023"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendEducation({
+                    id: crypto.randomUUID(),
+                    institution: "",
+                    degree: "",
+                    fieldOfStudy: "",
+                    startDate: "",
+                    endDate: "",
+                    current: false,
+                    description: "",
+                  })
+                }
+              >
+                + Add Education
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
+
         </Accordion>
 
         {/* We will add Experience Section here next */}

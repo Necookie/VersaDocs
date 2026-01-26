@@ -4,6 +4,7 @@ import { z } from "zod";
 // This handles the complex logic for job entries
 const experienceSchema = z.object({
   id: z.string(), // Unique ID for React keys
+  //1 for 1 character and the "" for the error message
   company: z.string().min(1, "Company name is required"),
   role: z.string().min(1, "Role is required"),
   startDate: z.string().min(1, "Start date is required"),

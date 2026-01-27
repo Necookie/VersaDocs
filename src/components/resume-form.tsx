@@ -262,9 +262,12 @@ export function ResumeForm() {
                       {...form.register(`experience.${index}.description`)}
                       placeholder="What did you accomplish?"
                     />
+<<<<<<< Updated upstream
                     <Button variant="outline" type="button" onClick={() => removeExperience(index)}>
                     Remove Experience
                   </Button>
+=======
+>>>>>>> Stashed changes
                   </div>
                 </div>
               ))}

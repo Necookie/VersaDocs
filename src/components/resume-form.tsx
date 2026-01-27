@@ -6,10 +6,37 @@ import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
+
+const STORAGE_KEY = "versadocs-resume-data";
 
 interface ResumeFormProps {
     onUpdate: (data: ResumeValues) => void;
+}
+
+function getInitialValues(): ResumeValues {
+    if (typeof window !== "undefined") {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                console.error("Failed to parse saved resume data", e);
+            }
+        }
+    }
+    return {
+        personalInfo: {
+            fullName: "",
+            email: "",
+            phone: "",
+            location: "",
+            linkedin: "",
+            website: "",
+        },
+        experience: [],
+        education: [],
+    };
 }
 
 export function ResumeForm({ onUpdate }: ResumeFormProps) {
@@ -17,18 +44,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
   // We use Zod to validate and type the form data
   const form = useForm({
     resolver: zodResolver(resumeSchema),
-    defaultValues: { //default empty values
-      personalInfo: {
-        fullName: "",
-        email: "",
-        phone: "",
-        linkedin: "",
-        website: "",
-        
-      },
-      experience: [], 
-      education: [], 
-    },
+    defaultValues: getInitialValues(),
   });
 
   // Setup useFieldArray for dynamic education entries
@@ -103,6 +119,15 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               {form.formState.errors.personalInfo?.phone && (
                 <p className="text-red-500 text-xs">
                   {form.formState.errors.personalInfo?.phone.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Location</label>
+              <Input {...form.register("personalInfo.location")} placeholder="City, State, Country" />
+              {form.formState.errors.personalInfo?.location && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.location.message}
                 </p>
               )}
             </div>

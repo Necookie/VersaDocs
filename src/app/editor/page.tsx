@@ -1,10 +1,12 @@
 "use client"
 import { ResumeForm } from "@/components/resume-form"
 import { ChevronLeft } from "lucide-react"
-import { useState} from "react"
+import { useState, useEffect } from "react"
 import { ResumeValues } from "@/lib/schemas/resume"
 import ResumePreview from "@/components/resume-preview"
 import  Link  from 'next/link'
+
+const STORAGE_KEY = "versadocs-resume-data";
 
 const defaultResumeData: ResumeValues = {
     personalInfo: {
@@ -12,15 +14,34 @@ const defaultResumeData: ResumeValues = {
         email: "",
         phone: "",
         linkedin: "",
+        location: "",
         website: "",
     },
     education: [],
     experience: [],
 }; 
 
+function getInitialData(): ResumeValues {
+    if (typeof window !== "undefined") {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                console.error("Failed to parse saved resume data", e);
+            }
+        }
+    }
+    return defaultResumeData;
+}
 
 export default function EditorPage() {
-    const [resumeData, setResumeData] = useState<ResumeValues>(defaultResumeData);
+    const [resumeData, setResumeData] = useState<ResumeValues>(getInitialData);
+
+    // Save to localStorage whenever data changes
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
+    }, [resumeData]);
 
   
 
@@ -50,7 +71,7 @@ export default function EditorPage() {
       </section>
 
       {/* --- RIGHT PANEL: The Preview (Fixed) --- */}
-      <section className="w-1/2 h-full bg-slate-900 flex flex-col">
+      <section className="w-1/2 h-full  flex flex-col">
         
         {/* Simple Toolbar */}
         <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6">

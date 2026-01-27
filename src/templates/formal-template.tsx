@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     },
     //header section
     header: {
-        marginBottom: 20,
+        marginBottom: 15,
         borderBottomWidth: 1,
         borderBottomColor: "#000000",
         paddingBottom: 10,
@@ -27,8 +27,10 @@ const styles = StyleSheet.create({
     contactInfo: {
         flexDirection: 'row',
         justifyContent: 'center',
+        marginTop: 15,
+        fontFamily: "Helvetica",
         fontSize: 10,
-        gap: 15,
+        gap: 5,
         color: '#555555',
     }, 
     //Section Headers
@@ -92,12 +94,11 @@ export default function FormalTemplate({data}: TemplateProps) {
                 {/* Header Section */}
                 <View style={styles.header}>
                     <Text style={styles.name}>{data.personalInfo.fullName}</Text>
-                </View>
-                <View style={styles.contactInfo}>
-                    {data.personalInfo.email && <Text>{data.personalInfo.email}</Text>}
-                    {data.personalInfo.phone && <Text>{data.personalInfo.phone}</Text>}
-                    {data.personalInfo.linkedin && <Text>{data.personalInfo.linkedin}</Text>}
-                    {data.personalInfo.website && <Text>{data.personalInfo.website}</Text>}
+                    <View style={styles.contactInfo}>
+                        {data.personalInfo.phone && <Text>{data.personalInfo.phone}</Text>}
+                        {data.personalInfo.email && <Text>{data.personalInfo.email}</Text>}
+                        {data.personalInfo.linkedin && <Text>{data.personalInfo.linkedin}</Text>}
+                    </View>
                 </View>
             </Page>
         </Document>

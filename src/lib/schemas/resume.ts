@@ -36,6 +36,7 @@ export const resumeSchema = z.object({
     fullName: z.string().min(1, "Full name is required"),
     email: z.email("Invalid email address"),
     phone: z.string().optional(),
+    location: z.string().min(1, "Location is required"),
     linkedin: z.string().optional(),
     website: z.string().optional(),
   }),

@@ -11,12 +11,12 @@ interface ResumePreviewProps {
 export default function ResumePreview({ resumeData }: ResumePreviewProps) {
 
     return (
-        <div className= "w-full h-full bg-slate-900 p-4 md:p-8 flex items-center">
+        <div className= "w-full h-full ">
             {/* key={JSON.stringify(data)} This forces the PDF to fully re-render whenever data changes. Without this, the PDF engine sometimes "lagging" behind your typing*/}
             <PDFViewer 
             key ={JSON.stringify(resumeData)}
-            className="w-full h-full min-h-[500px] rounded-lg shadow-xl border border-slate-700"
-            showToolbar={true}
+            className="w-full h-full border-0 "
+            showToolbar={false}
             >
                 <FormalTemplate data={resumeData}/>
             </PDFViewer>

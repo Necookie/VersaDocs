@@ -1,4 +1,4 @@
-import {Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import {Page, Text, View, Document, StyleSheet} from '@react-pdf/renderer';
 import { ResumeValues } from '@/lib/schemas/resume';
 
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         color: '#555555',
     }, 
     separator: {
-        marginHorizontal: 5,
+        marginHorizontal: 4,
     },
     //Section Headers
     sectionTitle: {

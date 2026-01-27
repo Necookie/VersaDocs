@@ -47,5 +47,6 @@ export const resumeSchema = z.object({
 });
 
 // 3. Export the TypeScript Type
-// This magic line creates the type { personalInfo: ... } automatically!
+// type resumeValues to get the types from the schema and z.infer to get the output value thats going to be there
+
 export type ResumeValues = z.infer<typeof resumeSchema>;

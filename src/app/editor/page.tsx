@@ -92,7 +92,7 @@ export default function EditorPage() {
         </div>
 
         {/* THE PREVIEW: We pass the "resumeData" so it can display it */}
-        <div className="flex items-center justify-end pt-5 border-b border-slate-200 bg-white">
+        <div className="flex items-center justify-end pt-5 pr-5 border-b border-slate-200 bg-white">
             <ResumeDownloadButton data={resumeData} />
         </div>
         <div className="flex-1 overflow-hidden p-4 flex items-center justify-center">

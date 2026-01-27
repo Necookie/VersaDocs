@@ -25,6 +25,7 @@ function getInitialValues(): ResumeValues {
             }
         }
     }
+    // Default empty values of the zod schema
     return {
         personalInfo: {
             fullName: "",
@@ -40,7 +41,7 @@ function getInitialValues(): ResumeValues {
 }
 
 export function ResumeForm({ onUpdate }: ResumeFormProps) {
-  // 1. Setup the form "Brain"
+  // 1. Setup the form 
   // We use Zod to validate and type the form data
   const form = useForm({
     resolver: zodResolver(resumeSchema),

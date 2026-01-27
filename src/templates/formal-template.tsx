@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     },
     contactInfo: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'center',
         marginTop: 15,
         fontFamily: "Helvetica",
@@ -33,6 +34,9 @@ const styles = StyleSheet.create({
         gap: 5,
         color: '#555555',
     }, 
+    separator: {
+        marginHorizontal: 5,
+    },
     //Section Headers
     sectionTitle: {
         fontSize: 12,
@@ -86,8 +90,17 @@ interface TemplateProps {
     data: ResumeValues;
 }
 
+const Separator = () => {
+    return <Text style={styles.separator}>•</Text>;
+}
 export default function FormalTemplate({data}: TemplateProps) {
-
+    const contactItems = [
+        data.personalInfo.phone,
+        data.personalInfo.email,
+        data.personalInfo.linkedin,
+        data.personalInfo.website,
+        data.personalInfo.location,
+    ].filter(Boolean); // Remove undefined or empty items
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -95,10 +108,14 @@ export default function FormalTemplate({data}: TemplateProps) {
                 <View style={styles.header}>
                     <Text style={styles.name}>{data.personalInfo.fullName}</Text>
                     <View style={styles.contactInfo}>
-                        {data.personalInfo.phone && <Text>{data.personalInfo.phone}</Text>}
-                        {data.personalInfo.email && <Text>{data.personalInfo.email}</Text>}
-                        {data.personalInfo.linkedin && <Text>{data.personalInfo.linkedin}</Text>}
+                        {contactItems.map((item, index) => (
+                            <View key={index} style ={{flexDirection: 'row'}}>
+                                <Text>{item}</Text>
+                                {index < contactItems.length -1 && <Separator />}
+                            </View>
+                        ))}
                     </View>
+        
                 </View>
             </Page>
         </Document>

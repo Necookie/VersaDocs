@@ -3,9 +3,17 @@ import { ResumeForm } from "@/components/resume-form"
 import { ChevronLeft } from "lucide-react"
 import { useState, useEffect } from "react"
 import { ResumeValues } from "@/lib/schemas/resume"
-import ResumePreview from "@/components/resume-preview"
 import  Link  from 'next/link'
+import dynamic from "next/dynamic"
 
+const ResumePreview = dynamic(() => import ("@/components/resume-preview"), {
+    ssr: false,
+    loading: () => (
+     <div className="flex items-center justify-center h-full text-slate-400">
+        Loading PDF Engine...
+     </div>
+    ),
+})
 const STORAGE_KEY = "versadocs-resume-data";
 
 const defaultResumeData: ResumeValues = {

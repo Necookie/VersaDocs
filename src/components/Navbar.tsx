@@ -22,6 +22,9 @@ export default function Navbar() {
 
         {/* Only show User Menu if logged in */}
         <SignedIn>
+          <Link href="/dashboard" className="text-gray-600 hover:text-black">Dashboard</Link>
+          <Link href="/templates" className="text-gray-600 hover:text-black">Templates</Link>
+          <Link href="/Pricing" className="text-gray-600 hover:text-black">Upgrade</Link>
           <Link href="/editor" className="text-gray-600 hover:text-black">Editor</Link>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>

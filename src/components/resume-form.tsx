@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 
 export function ResumeForm() {
   // 1. Setup the form "Brain"
@@ -32,6 +32,12 @@ export function ResumeForm() {
     control: form.control,
     name: "education",
   });
+
+  const { fields: experienceFields, append: appendExperience, remove: removeExperience} = useFieldArray({
+    control: form.control,
+    name: "experience",
+  })
+
 
   // 2. Watch the data (so we can see it update live!)
   // This is vital for your <500ms preview requirement later
@@ -117,14 +123,6 @@ export function ResumeForm() {
                 <div key={field.id} className="border rounded-lg p-4 space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Education {index + 1}</span>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => removeEducation(index)}
-                    >
-                      Remove
-                    </Button>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Institution</label>
@@ -178,6 +176,9 @@ export function ResumeForm() {
                       />
                     </div>
                   </div>
+                  <Button variant="outline" type="button" onClick={() => removeEducation(index)}>
+                    Remove Education
+                  </Button>
                 </div>
               ))}
               <Button
@@ -201,9 +202,94 @@ export function ResumeForm() {
             </AccordionContent>
           </AccordionItem>
 
+          {/* EXPERIENCE SECTION */}
+          <AccordionItem value="experience" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Experience</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {experienceFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Experience {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Company</label>
+                    <Input
+                      {...form.register(`experience.${index}.company`)}
+                      placeholder="Company name"
+                    />
+                    {form.formState.errors.experience?.[index]?.company && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.experience[index]?.company?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Role</label>
+                    <Input
+                      {...form.register(`experience.${index}.role`)}
+                      placeholder="Software Engineer"
+                    />
+                    {form.formState.errors.experience?.[index]?.role && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.experience[index]?.role?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Start Date</label>
+                      <Input
+                        {...form.register(`experience.${index}.startDate`)}
+                        placeholder="Jan 2023"
+                      />
+                      {form.formState.errors.experience?.[index]?.startDate && (
+                        <p className="text-red-500 text-xs">
+                          {form.formState.errors.experience[index]?.startDate?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">End Date</label>
+                      <Input
+                        {...form.register(`experience.${index}.endDate`)}
+                        placeholder="Present"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Description</label>
+                    <Input
+                      {...form.register(`experience.${index}.description`)}
+                      placeholder="What did you accomplish?"
+                    />
+                    <Button variant="outline" type="button" onClick={() => removeExperience(index)}>
+                    Remove Experience
+                  </Button>
+                  </div>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendExperience({
+                    id: crypto.randomUUID(),
+                    company: "",
+                    role: "",
+                    startDate: "",
+                    endDate: "",
+                    current: false,
+                    description: "",
+                    rawInput: "",
+                    isGenerating: false,
+                  })
+                }
+              >
+                + Add Experience
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
-
-        {/* We will add Experience Section here next */}
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>
       </div>
 

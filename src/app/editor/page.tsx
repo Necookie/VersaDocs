@@ -14,6 +14,10 @@ const ResumePreview = dynamic(() => import ("@/components/resume-preview"), {
      </div>
     ),
 })
+
+const ResumeDownloadButton = dynamic(() => import ("@/components/resume-download-button").then((mod) => mod.ResumeDownloadButton), {
+    ssr: false,
+})
 const STORAGE_KEY = "versadocs-resume-data";
 
 const defaultResumeData: ResumeValues = {
@@ -88,7 +92,10 @@ export default function EditorPage() {
         </div>
 
         {/* THE PREVIEW: We pass the "resumeData" so it can display it */}
-        <div className="flex-1 overflow-hidden p-8 flex items-center justify-center">
+        <div className="flex items-center justify-end pt-5 border-b border-slate-200 bg-white">
+            <ResumeDownloadButton data={resumeData} />
+        </div>
+        <div className="flex-1 overflow-hidden p-4 flex items-center justify-center">
             <ResumePreview resumeData={resumeData} />
         </div>
 

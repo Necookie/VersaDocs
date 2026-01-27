@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <nav className='flex justify-between items-center p-6 shadow-xl bg-white'>
+    <nav className='flex justify-between items-center p-5  shadow-md bg-white'>
       <div className='flex gap-2 ml-20'>
         <p className = 'text-2xl font-semibold'>VersaDocs</p>
       </div>
@@ -22,11 +22,10 @@ export default function Navbar() {
 
         {/* Only show User Menu if logged in */}
         <SignedIn>
-          <Link href="/dashboard" className="text-gray-600 hover:text-black">Dashboard</Link>
           <Link href="/templates" className="text-gray-600 hover:text-black">Templates</Link>
           <Link href="/Pricing" className="text-gray-600 hover:text-black">Upgrade</Link>
           <Link href="/editor" className="text-gray-600 hover:text-black">Editor</Link>
-          <UserButton afterSignOutUrl="/" />
+          <UserButton/>
         </SignedIn>
       </div>
     </nav>

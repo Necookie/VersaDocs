@@ -1,14 +1,18 @@
 "use client"; // <--- This tells Next.js: "This runs in the browser, not the server"
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { use, useEffect } from "react";
 
+interface ResumeFormProps {
+    onUpdate: (data: ResumeValues) => void;
+}
 
-export function ResumeForm() {
+export function ResumeForm({ onUpdate }: ResumeFormProps) {
   // 1. Setup the form "Brain"
   // We use Zod to validate and type the form data
   const form = useForm({
@@ -41,15 +45,24 @@ export function ResumeForm() {
 
   // 2. Watch the data (so we can see it update live!)
   // This is vital for your <500ms preview requirement later
-  const formValues = form.watch();
+  const formValues = useWatch({
+    control: form.control,
+  });
+
+  useEffect(() => {
+    if (onUpdate) {
+      onUpdate(formValues as ResumeValues); // Notify parent of changes
+    }
+  }, [formValues, onUpdate]);
 
   function onSubmit(data: ResumeValues) {
     console.log("Form Submitted:", data);
     // Later: This is where we will send data to the PDF generator
+    onUpdate(data);
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 max-w-7xl mx-auto">
+    <div className="w-full">
       
       {/* LEFT COLUMN: The Editor */}
       <div className="space-y-6">
@@ -292,19 +305,6 @@ export function ResumeForm() {
         </Accordion>
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>
       </div>
-
-      {/* RIGHT COLUMN: The "Preview" (Raw Data for now) */}
-      <div className="bg-slate-950 text-slate-50 p-6 rounded-lg font-mono text-sm h-fit sticky top-8">
-        <h3 className="text-xl font-bold mb-4 text-green-400">Live State Preview</h3>
-        <p className="text-slate-400 mb-4">
-          As you type on the left, this updates instantly. 
-          This is the data we will feed into the PDF engine.
-        </p>
-        <pre className="whitespace-pre-wrap">
-          {JSON.stringify(formValues, null, 2)}
-        </pre>
-      </div>
-
     </div>
   );
 }

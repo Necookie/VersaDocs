@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
         textTransform: "uppercase",
         borderBottomWidth: 1,
         borderBottomColor: "#000000",
-        marginTop: 15,
+        marginTop: 8,
         marginBottom: 8,
         paddingBottom: 2,  
     },
     //Content Blocks
     jobBlock: {
-        marginBottom: 10,
+        marginBottom: 3,
     },
     jobHeader: {
         flexDirection: 'column',
@@ -75,6 +75,9 @@ const styles = StyleSheet.create({
     JobDescription: {
         flexDirection: 'column',
         marginTop: 4,
+    },
+    skills: {
+        fontFamily: "Helvetica-Bold"
     },
     bulletPoint: {
         flexDirection: "row",
@@ -122,6 +125,7 @@ export default function FormalTemplate({data}: TemplateProps) {
                         ))}
                     </View>
                 </View>
+                
                 {/* Summary Section */}
                 <View style ={styles.sectionTitle}>
                     <Text>Summary</Text>
@@ -182,6 +186,45 @@ export default function FormalTemplate({data}: TemplateProps) {
                                         <Text style={styles.bulletText}>{point}</Text>
                                     </View>
                                ))}
+                           </View>
+                        </View>
+                    ))}
+                </View>
+                {/*Skills Section */}
+
+                <View style = {styles.sectionTitle}>
+                    <Text>Skills</Text>
+                </View>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 4,}}>
+                    {data.skills.map((skill, index) => (
+                        <View key={index} style={{ flexDirection: 'row', width: '30%' }}>
+                            <Text style={styles.bulletDot}>•</Text>
+                            <Text style={styles.skills}>{skill.skills}</Text>
+                        </View>
+                    ))}
+                </View>
+                {/* Projects Section */}
+                <View style = {styles.sectionTitle}>
+                    <Text>Projects</Text>
+                </View>
+
+                <View style = {styles.jobHeader}>
+                    {data.projects.map((project) => (
+                        <View key={project.id} style = {styles.jobBlock}>
+                            <View style={styles.jobHeader}>
+                                <View style={{flexDirection: "row",  }}> 
+                                <Text style={styles.jobRole}>{project.title} <Text> | </Text> </Text>
+                                <Text style={styles.jobDate}>{project.startDate}</Text>
+                                </View>
+                                <Text style={styles.companyName}>{project.role}</Text>
+                            </View>
+                            <View style= {styles.JobDescription}>
+                                {project.description.map((point, index) => (
+                                    <View key = {index} style= {styles.bulletPoint}>
+                                        <Text style={styles.bulletDot}>•</Text>
+                                        <Text style={styles.bulletText}>{point}</Text>
+                                    </View>
+                                ))}
                            </View>
                         </View>
                     ))}

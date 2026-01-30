@@ -24,7 +24,7 @@ const defaultResumeData: ResumeValues = {
     personalInfo: {
         fullName: "",
         email: "",
-        phone: "",
+        phone: undefined,
         linkedin: "",
         location: "",
         summary: "",

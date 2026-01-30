@@ -36,7 +36,7 @@ function getInitialValues(): ResumeValues {
         personalInfo: {
             fullName: "",
             email: "",
-            phone: "",
+            phone: undefined,
             location: "",
             summary: "",
             linkedin: "",
@@ -100,14 +100,45 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
     onUpdate(data);
   }
 
+  function clearAll() {
+    const empty: ResumeValues = {
+      personalInfo: {
+        fullName: "",
+        email: "",
+        phone: undefined,
+        location: "",
+        summary: "",
+        linkedin: "",
+        website: "",
+      },
+      experience: [],
+      skills: [],
+      education: [],
+      projects: [],
+    };
+
+    form.reset(empty);
+    try {
+      if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.error("Failed to clear storage", e);
+    }
+    if (onUpdate) onUpdate(empty);
+  }
+
   return (
     <div className="w-full">
       
       {/* LEFT COLUMN: The Editor */}
       <div className="space-y-6">
+        <div className="flex justify-start">
+          <Button variant="destructive" size="sm" onClick={clearAll}>
+            Clear All
+          </Button>
+        </div>
         <Accordion type="multiple"  defaultValue={["personal-info"]}>
           <AccordionItem value="personal-info" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Personal Info</AccordionTrigger>
+            <AccordionTrigger >Personal Info</AccordionTrigger>
           <AccordionContent className="space-y-4">
             {/* FULL NAME INPUT */}
             <div className="space-y-2">

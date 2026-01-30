@@ -10,8 +10,7 @@ const experienceSchema = z.object({
   startDate: z.string().min(1, "Start date is required"),
   endDate: z.string().optional(),
   current: z.boolean().default(false),
-  description: z.string().optional(), // The final narrative
-  
+  description: z.array(z.string()), // The final narrative
   // AI Specific fields
   rawInput: z.string().optional(), // What user typed ("I fixed bugs")
   isGenerating: z.boolean().default(false), // Loading state
@@ -37,6 +36,7 @@ export const resumeSchema = z.object({
     email: z.email("Invalid email address"),
     phone: z.string().optional(),
     location: z.string().min(1, "Location is required"),
+    summary: z.string(),
     linkedin: z.string().optional(),
     website: z.string().optional(),
   }),

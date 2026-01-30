@@ -7,14 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useEffect } from "react";
+import { JobDescription } from "./Jobdescription";
+
 
 const STORAGE_KEY = "versadocs-resume-data";
 
 interface ResumeFormProps {
+  // onUpdate function prop to update whenever the form data changes and returns void after updating
     onUpdate: (data: ResumeValues) => void;
 }
 
 function getInitialValues(): ResumeValues {
+  // if window is in the browser get data from local storage and if there is data parse it and return it else if window is not in the browser return undefined
     if (typeof window !== "undefined") {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -32,6 +36,7 @@ function getInitialValues(): ResumeValues {
             email: "",
             phone: "",
             location: "",
+            summary: "",
             linkedin: "",
             website: "",
         },
@@ -44,12 +49,14 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
   // 1. Setup the form 
   // We use Zod to validate and type the form data
   const form = useForm({
+    //resolver to connect the schema to the form and handles validation
     resolver: zodResolver(resumeSchema),
     defaultValues: getInitialValues(),
   });
 
   // Setup useFieldArray for dynamic education entries
   const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
+    //control to gain access to the schema and name to specify which field array we are working with
     control: form.control,
     name: "education",
   });
@@ -58,6 +65,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
     control: form.control,
     name: "experience",
   })
+  
 
 
   // 2. Watch the data (so we can see it update live!)
@@ -65,7 +73,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
   const formValues = useWatch({
     control: form.control,
   });
-
+ //useEffect to update the form values everytime there is a change in the form values
   useEffect(() => {
     if (onUpdate) {
       onUpdate(formValues as ResumeValues); // Notify parent of changes
@@ -89,7 +97,8 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
           <AccordionContent className="space-y-4">
             {/* FULL NAME INPUT */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Full Name</label>
+              <label className="text-sm font-medium">Full Name <span className="text-red-500">*</span></label>
+              {/*..form.register to get all of the data in the form and handle validation like onChange or onBlur */}
               <Input 
                 {...form.register("personalInfo.fullName")} 
                 placeholder="John Doe" 
@@ -103,7 +112,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
             </div>
             {/* EMAIL INPUT */}
             <div className="space-y-s">
-              <label className="text-sm font-medium">Email</label>
+              <label className="text-sm font-medium">Email <span className="text-red-500">*</span></label>
               <Input 
                 {...form.register("personalInfo.email")} 
                 placeholder="john@example.com" 
@@ -115,7 +124,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               )}
             </div>
             <div>
-              <label className="text-sm font-medium">Phone</label>
+              <label className="text-sm font-medium">Phone <span className="text-gray-400 text-xs">(optional)</span></label>
               <Input {...form.register("personalInfo.phone")} placeholder="(123) 456-7890" />
               {form.formState.errors.personalInfo?.phone && (
                 <p className="text-red-500 text-xs">
@@ -124,7 +133,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               )}
             </div>
             <div>
-              <label className="text-sm font-medium">Location</label>
+              <label className="text-sm font-medium">Location <span className="text-red-500">*</span></label>
               <Input {...form.register("personalInfo.location")} placeholder="City, State, Country" />
               {form.formState.errors.personalInfo?.location && (
                 <p className="text-red-500 text-xs">
@@ -133,7 +142,17 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               )}
             </div>
             <div>
-              <label className="text-sm font-medium">Linkedin</label>
+              <label className="text-sm font-medium">Summary <span className="text-red-500">*</span></label>
+              <Input {...form.register("personalInfo.summary")} placeholder = "A brief summary about what you do" />
+              {form.formState.errors.personalInfo?.summary && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.summary.message}
+                </p>
+              )}
+              
+            </div>
+            <div>
+              <label className="text-sm font-medium">Linkedin <span className="text-gray-400 text-xs">(optional)</span></label>
               <Input {...form.register("personalInfo.linkedin")} placeholder="linkedin.com/in/username" />
               {form.formState.errors.personalInfo?.linkedin && (
                 <p className="text-red-500 text-xs">
@@ -142,7 +161,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               )}
             </div>
             <div>
-              <label className="text-sm font-medium">Website</label>
+              <label className="text-sm font-medium">Website <span className="text-gray-400 text-xs">(optional)</span></label>
               <Input {...form.register("personalInfo.website")} placeholder="https://example.com" />
               {form.formState.errors.personalInfo?.website && (
                 <p className="text-red-500 text-xs">
@@ -154,6 +173,94 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
           </AccordionContent>
           </AccordionItem>
 
+          {/* EXPERIENCE SECTION */}
+          <AccordionItem value="experience" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Experience</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {experienceFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Experience {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Company <span className="text-red-500">*</span></label>
+                    <Input
+                      {...form.register(`experience.${index}.company`)}
+                      placeholder="Company name"
+                    />
+                    {form.formState.errors.experience?.[index]?.company && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.experience[index]?.company?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Role <span className="text-red-500">*</span></label>
+                    <Input
+                      {...form.register(`experience.${index}.role`)}
+                      placeholder="Software Engineer"
+                    />
+                    {form.formState.errors.experience?.[index]?.role && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.experience[index]?.role?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Start Date <span className="text-red-500">*</span></label>
+                      <Input
+                        {...form.register(`experience.${index}.startDate`)}
+                        placeholder="Jan 2023"
+                      />
+                      {form.formState.errors.experience?.[index]?.startDate && (
+                        <p className="text-red-500 text-xs">
+                          {form.formState.errors.experience[index]?.startDate?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">End Date <span className="text-gray-400 text-xs">(optional)</span></label>
+                      <Input
+                        {...form.register(`experience.${index}.endDate`)}
+                        placeholder="Present"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium ">Currently Working Here: </label>
+                      {/* Checkbox to indicate if the user is currently working in this role */}
+                      <input type = "checkbox" {...form.register(`experience.${index}.current`)} className='h-3 w-5 text-indigo-600 rounded border-gray-300' />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <JobDescription JobIndex={index} control={form.control as never} />
+                    <Button variant="outline" type="button" onClick={() => removeExperience(index)} className= "mt-2">
+                    Remove Experience
+                  </Button>
+                  </div>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendExperience({
+                    id: crypto.randomUUID(),
+                    company: "",
+                    role: "",
+                    startDate: "",
+                    endDate: "",
+                    current: false,
+                    description: [],
+                    rawInput: "",
+                    isGenerating: false,
+                  })
+                }
+              >
+                + Add Experience
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
           {/* EDUCATION SECTION */}
           <AccordionItem value="education" className="shadow-md rounded-md p-4">
             <AccordionTrigger>Education</AccordionTrigger>
@@ -164,7 +271,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                     <span className="font-medium">Education {index + 1}</span>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Institution</label>
+                    <label className="text-sm font-medium">Institution <span className="text-red-500">*</span></label>
                     <Input
                       {...form.register(`education.${index}.institution`)}
                       placeholder="University name"
@@ -176,7 +283,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Degree</label>
+                    <label className="text-sm font-medium">Degree <span className="text-red-500">*</span></label>
                     <Input
                       {...form.register(`education.${index}.degree`)}
                       placeholder="Bachelor's, Master's, etc."
@@ -188,7 +295,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Field of Study</label>
+                    <label className="text-sm font-medium">Field of Study <span className="text-gray-400 text-xs">(optional)</span></label>
                     <Input
                       {...form.register(`education.${index}.fieldOfStudy`)}
                       placeholder="Computer Science"
@@ -196,7 +303,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Start Date</label>
+                      <label className="text-sm font-medium">Start Date <span className="text-red-500">*</span></label>
                       <Input
                         {...form.register(`education.${index}.startDate`)}
                         placeholder="Sep 2019"
@@ -208,7 +315,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                       )}
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">End Date</label>
+                      <label className="text-sm font-medium">End Date <span className="text-gray-400 text-xs">(Optional)</span></label>
                       <Input
                         {...form.register(`education.${index}.endDate`)}
                         placeholder="May 2023"
@@ -240,96 +347,9 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               </Button>
             </AccordionContent>
           </AccordionItem>
-
-          {/* EXPERIENCE SECTION */}
-          <AccordionItem value="experience" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Experience</AccordionTrigger>
-            <AccordionContent className="space-y-4">
-              {experienceFields.map((field, index) => (
-                <div key={field.id} className="border rounded-lg p-4 space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Experience {index + 1}</span>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Company</label>
-                    <Input
-                      {...form.register(`experience.${index}.company`)}
-                      placeholder="Company name"
-                    />
-                    {form.formState.errors.experience?.[index]?.company && (
-                      <p className="text-red-500 text-xs">
-                        {form.formState.errors.experience[index]?.company?.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Role</label>
-                    <Input
-                      {...form.register(`experience.${index}.role`)}
-                      placeholder="Software Engineer"
-                    />
-                    {form.formState.errors.experience?.[index]?.role && (
-                      <p className="text-red-500 text-xs">
-                        {form.formState.errors.experience[index]?.role?.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Start Date</label>
-                      <Input
-                        {...form.register(`experience.${index}.startDate`)}
-                        placeholder="Jan 2023"
-                      />
-                      {form.formState.errors.experience?.[index]?.startDate && (
-                        <p className="text-red-500 text-xs">
-                          {form.formState.errors.experience[index]?.startDate?.message}
-                        </p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">End Date</label>
-                      <Input
-                        {...form.register(`experience.${index}.endDate`)}
-                        placeholder="Present"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Description</label>
-                    <Input
-                      {...form.register(`experience.${index}.description`)}
-                      placeholder="What did you accomplish?"
-                    />
-                    <Button variant="outline" type="button" onClick={() => removeExperience(index)}>
-                    Remove Experience
-                  </Button>
-                  </div>
-                </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() =>
-                  appendExperience({
-                    id: crypto.randomUUID(),
-                    company: "",
-                    role: "",
-                    startDate: "",
-                    endDate: "",
-                    current: false,
-                    description: "",
-                    rawInput: "",
-                    isGenerating: false,
-                  })
-                }
-              >
-                + Add Experience
-              </Button>
-            </AccordionContent>
-          </AccordionItem>
         </Accordion>
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>
+        
       </div>
     </div>
   );

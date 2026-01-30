@@ -27,6 +27,7 @@ const defaultResumeData: ResumeValues = {
         phone: "",
         linkedin: "",
         location: "",
+        summary: "",
         website: "",
     },
     education: [],

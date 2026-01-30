@@ -8,10 +8,11 @@ import { Download } from "lucide-react";
 // Assuming you have a basic Button component (if not, use a standard <button>)
 import { Button } from "@/components/ui/button"; 
 
+//typescript interface : to define the props and the type of data which is the values of the resume form for the ResumeDownloadButton component
 interface DownloadButtonProps {
   data: ResumeValues;
 }
-
+//  to indicate the type of props that the ResumeDownloadButton component will receive
 export const ResumeDownloadButton = ({ data }: DownloadButtonProps) => {
   return (
     <PDFDownloadLink

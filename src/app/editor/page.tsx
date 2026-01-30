@@ -27,10 +27,13 @@ const defaultResumeData: ResumeValues = {
         phone: "",
         linkedin: "",
         location: "",
+        summary: "",
         website: "",
     },
     education: [],
+    skills: [],
     experience: [],
+    projects: [],
 }; 
 
 function getInitialData(): ResumeValues {

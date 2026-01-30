@@ -10,12 +10,16 @@ const experienceSchema = z.object({
   startDate: z.string().min(1, "Start date is required"),
   endDate: z.string().optional(),
   current: z.boolean().default(false),
-  description: z.string().optional(), // The final narrative
-  
+  description: z.array(z.string()), // The final narrative
   // AI Specific fields
   rawInput: z.string().optional(), // What user typed ("I fixed bugs")
   isGenerating: z.boolean().default(false), // Loading state
 });
+
+//Skills schema
+const SkillsSchema = z.object({
+  skills: z.array(z.string()).max(10, "You can add up to 10 skills"),
+})
 
 //Education Schema
 const educationSchema = z.object({
@@ -26,24 +30,37 @@ const educationSchema = z.object({
     startDate: z.string().min(1, "Start date is required"),
     endDate: z.string().optional(),
     current: z.boolean().default(false),
-    description: z.string().optional(),
+    description: z.array(z.string()).default([]),
 })
 
 // 2. Define the Main Resume Schema
 // This combines all sections into one big object
+// Projects Schema
+const projectSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1, "Project title is required"),
+  role: z.string().min(1, "Role is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  description: z.array(z.string()).default([]),
+});
+
 export const resumeSchema = z.object({
   personalInfo: z.object({
     fullName: z.string().min(1, "Full name is required"),
     email: z.email("Invalid email address"),
     phone: z.string().optional(),
     location: z.string().min(1, "Location is required"),
+    summary: z.string(),
     linkedin: z.string().optional(),
     website: z.string().optional(),
   }),
   summary: z.string().optional(),
   // default to empty array for both experience and education
   experience: z.array(experienceSchema).default([]), 
+  skills: z.array(SkillsSchema).default([]),
   education: z.array(educationSchema).default([]),
+  projects: z.array(projectSchema).default([]),
+
 });
 
 // 3. Export the TypeScript Type

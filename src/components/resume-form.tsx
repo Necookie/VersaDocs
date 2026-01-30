@@ -131,8 +131,8 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
       
       {/* LEFT COLUMN: The Editor */}
       <div className="space-y-6">
-        <div className="flex justify-start">
-          <Button variant="destructive" size="sm" onClick={clearAll}>
+        <div className="flex justify-end">
+          <Button variant="outline" size="sm" onClick={clearAll} className="mr-2">
             Clear All
           </Button>
         </div>

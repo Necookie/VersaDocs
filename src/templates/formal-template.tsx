@@ -1,6 +1,6 @@
 import {Page, Text, View, Document, StyleSheet} from '@react-pdf/renderer';
 import { ResumeValues } from '@/lib/schemas/resume';
-import { JobDescription } from '@/components/Jobdescription';
+
 
 //make styles for the pdf document
 const styles = StyleSheet.create({
@@ -156,10 +156,36 @@ export default function FormalTemplate({data}: TemplateProps) {
                                 ))}
                            </View>
                         </View>
-                    ))
-                    }
+                    ))}
                 </View>
-                
+                {/* Education Section */}
+                <View style = {styles.sectionTitle}>
+                    <Text>Education</Text>
+                </View>
+
+                <View style = {styles.jobHeader}>
+                    {data.education.map((edu) => (
+                        <View key={edu.id} style = {styles.jobBlock}>
+                            <View style={styles.jobHeader}>
+                                <View style={{flexDirection: "row", justifyContent: "space-between"}}> 
+                                <Text style={styles.jobRole}>{edu.degree}</Text>
+                                <Text style={styles.jobDate}>
+                                    {edu.startDate} - {edu.current ? "Present" : edu.endDate || ""}
+                                </Text>
+                                </View>
+                                <Text style={styles.companyName}>{edu.institution}</Text>
+                            </View>
+                            <View style= {styles.JobDescription}>
+                               {edu.description.map((point, index) => (
+                                    <View key = {index} style= {styles.bulletPoint}>
+                                        <Text style={styles.bulletDot}>•</Text>
+                                        <Text style={styles.bulletText}>{point}</Text>
+                                    </View>
+                               ))}
+                           </View>
+                        </View>
+                    ))}
+                </View>
             </Page>
         </Document>
     )

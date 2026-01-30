@@ -33,6 +33,7 @@ const defaultResumeData: ResumeValues = {
     education: [],
     skills: [],
     experience: [],
+    projects: [],
 }; 
 
 function getInitialData(): ResumeValues {

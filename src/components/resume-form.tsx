@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useEffect } from "react";
 import { JobDescription } from "./Jobdescription";
+import { EducationDescription } from "./EducationDescription";
+import { ProjectDescription } from "./ProjectDescription";
 
 
 const STORAGE_KEY = "versadocs-resume-data";
@@ -42,7 +44,8 @@ function getInitialValues(): ResumeValues {
         },
         experience: [],
         skills: [],
-        education: [],
+      education: [],
+      projects: [],
     };
 }
 
@@ -71,6 +74,11 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
     control: form.control,
     name: "skills",
   })
+
+  const { fields: projectFields, append: appendProject, remove: removeProject } = useFieldArray({
+    control: form.control,
+    name: "projects",
+  });
   
 
 
@@ -352,6 +360,8 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                       />
                     </div>
                   </div>
+                  {/* Education description bullets component */}
+                  <EducationDescription EducationIndex={index} control={form.control as never} />
                   <Button variant="outline" type="button" onClick={() => removeEducation(index)}>
                     Remove Education
                   </Button>
@@ -369,11 +379,67 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
                     startDate: "",
                     endDate: "",
                     current: false,
-                    description: "",
+                    description: [],
                   })
                 }
               >
                 + Add Education
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
+        
+          {/* Projects Section */}
+          <AccordionItem value="projects" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Projects</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {projectFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Project {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Project Title <span className="text-red-500">*</span></label>
+                    <Input {...form.register(`projects.${index}.title`)} placeholder="Project title" />
+                    {form.formState.errors.projects?.[index]?.title && (
+                      <p className="text-red-500 text-xs">{form.formState.errors.projects[index]?.title?.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Role <span className="text-red-500">*</span></label>
+                    <Input {...form.register(`projects.${index}.role`)} placeholder="Your role" />
+                    {form.formState.errors.projects?.[index]?.role && (
+                      <p className="text-red-500 text-xs">{form.formState.errors.projects[index]?.role?.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Start Date <span className="text-red-500">*</span></label>
+                    <Input {...form.register(`projects.${index}.startDate`)} placeholder="Jan 2024" />
+                    {form.formState.errors.projects?.[index]?.startDate && (
+                      <p className="text-red-500 text-xs">{form.formState.errors.projects[index]?.startDate?.message}</p>
+                    )}
+                  </div>
+
+                  <ProjectDescription ProjectIndex={index} control={form.control as never} />
+
+                  <Button variant="outline" type="button" onClick={() => removeProject(index)}>
+                    Remove Project
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendProject({
+                    id: crypto.randomUUID(),
+                    title: "",
+                    role: "",
+                    startDate: "",
+                    description: [],
+                  })
+                }
+              >
+                + Add Project
               </Button>
             </AccordionContent>
           </AccordionItem>

@@ -30,11 +30,20 @@ const educationSchema = z.object({
     startDate: z.string().min(1, "Start date is required"),
     endDate: z.string().optional(),
     current: z.boolean().default(false),
-    description: z.string().optional(),
+    description: z.array(z.string()).default([]),
 })
 
 // 2. Define the Main Resume Schema
 // This combines all sections into one big object
+// Projects Schema
+const projectSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1, "Project title is required"),
+  role: z.string().min(1, "Role is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  description: z.array(z.string()).default([]),
+});
+
 export const resumeSchema = z.object({
   personalInfo: z.object({
     fullName: z.string().min(1, "Full name is required"),
@@ -50,7 +59,8 @@ export const resumeSchema = z.object({
   experience: z.array(experienceSchema).default([]), 
   skills: z.array(SkillsSchema).default([]),
   education: z.array(educationSchema).default([]),
-  
+  projects: z.array(projectSchema).default([]),
+
 });
 
 // 3. Export the TypeScript Type

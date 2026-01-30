@@ -31,6 +31,7 @@ const defaultResumeData: ResumeValues = {
         website: "",
     },
     education: [],
+    skills: [],
     experience: [],
 }; 
 

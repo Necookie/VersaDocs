@@ -41,6 +41,7 @@ function getInitialValues(): ResumeValues {
             website: "",
         },
         experience: [],
+        skills: [],
         education: [],
     };
 }
@@ -64,6 +65,11 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
   const { fields: experienceFields, append: appendExperience, remove: removeExperience} = useFieldArray({
     control: form.control,
     name: "experience",
+  })
+
+  const {fields: skillsFields, append: appendSkills, remove: removeSkills} = useFieldArray({
+    control: form.control,
+    name: "skills",
   })
   
 
@@ -259,6 +265,30 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               >
                 + Add Experience
               </Button>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="skills" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Skills</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {skillsFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4"> 
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Skill {index + 1}</span>
+                    <div>
+                      <Input {...form.register(`skills.${index}.skills`)} placeholder="e.g. JavaScript, React, Node.js" />
+                    </div>
+                    <Button variant="outline" type="button" onClick={() => removeSkills(index)}>
+                      Remove Skill
+                    </Button>
+                  </div>
+                </div>
+              ))}
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  onClick={() => appendSkills({ skills: [] })}>
+                    + Add Skill
+                    </Button>
             </AccordionContent>
           </AccordionItem>
           {/* EDUCATION SECTION */}

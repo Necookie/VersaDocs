@@ -16,6 +16,11 @@ const experienceSchema = z.object({
   isGenerating: z.boolean().default(false), // Loading state
 });
 
+//Skills schema
+const SkillsSchema = z.object({
+  skills: z.array(z.string()).max(10, "You can add up to 10 skills"),
+})
+
 //Education Schema
 const educationSchema = z.object({
     id: z.string(),
@@ -43,7 +48,9 @@ export const resumeSchema = z.object({
   summary: z.string().optional(),
   // default to empty array for both experience and education
   experience: z.array(experienceSchema).default([]), 
+  skills: z.array(SkillsSchema).default([]),
   education: z.array(educationSchema).default([]),
+  
 });
 
 // 3. Export the TypeScript Type

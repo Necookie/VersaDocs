@@ -1,99 +1,452 @@
 "use client"; // <--- This tells Next.js: "This runs in the browser, not the server"
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useEffect } from "react";
+import { JobDescription } from "./Jobdescription";
+import { EducationDescription } from "./EducationDescription";
+import { ProjectDescription } from "./ProjectDescription";
 
-export function ResumeForm() {
-  // 1. Setup the form "Brain"
+
+const STORAGE_KEY = "versadocs-resume-data";
+
+interface ResumeFormProps {
+  // onUpdate function prop to update whenever the form data changes and returns void after updating
+    onUpdate: (data: ResumeValues) => void;
+}
+
+function getInitialValues(): ResumeValues {
+  // if window is in the browser get data from local storage and if there is data parse it and return it else if window is not in the browser return undefined
+    if (typeof window !== "undefined") {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                console.error("Failed to parse saved resume data", e);
+            }
+        }
+    }
+    // Default empty values of the zod schema
+    return {
+        personalInfo: {
+            fullName: "",
+            email: "",
+            phone: "",
+            location: "",
+            summary: "",
+            linkedin: "",
+            website: "",
+        },
+        experience: [],
+        skills: [],
+      education: [],
+      projects: [],
+    };
+}
+
+export function ResumeForm({ onUpdate }: ResumeFormProps) {
+  // 1. Setup the form 
   // We use Zod to validate and type the form data
   const form = useForm({
+    //resolver to connect the schema to the form and handles validation
     resolver: zodResolver(resumeSchema),
-    defaultValues: { //default empty values
-      personalInfo: {
-        fullName: "",
-        email: "",
-        phone: "",
-        linkedin: "",
-        website: "",
-        
-      },
-      experience: [], 
-      education: [], 
-    },
+    defaultValues: getInitialValues(),
   });
+
+  // Setup useFieldArray for dynamic education entries
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
+    //control to gain access to the schema and name to specify which field array we are working with
+    control: form.control,
+    name: "education",
+  });
+
+  const { fields: experienceFields, append: appendExperience, remove: removeExperience} = useFieldArray({
+    control: form.control,
+    name: "experience",
+  })
+
+  const {fields: skillsFields, append: appendSkills, remove: removeSkills} = useFieldArray({
+    control: form.control,
+    name: "skills",
+  })
+
+  const { fields: projectFields, append: appendProject, remove: removeProject } = useFieldArray({
+    control: form.control,
+    name: "projects",
+  });
+  
+
 
   // 2. Watch the data (so we can see it update live!)
   // This is vital for your <500ms preview requirement later
-  const formValues = form.watch();
+  const formValues = useWatch({
+    control: form.control,
+  });
+ //useEffect to update the form values everytime there is a change in the form values
+  useEffect(() => {
+    if (onUpdate) {
+      onUpdate(formValues as ResumeValues); // Notify parent of changes
+    }
+  }, [formValues, onUpdate]);
 
   function onSubmit(data: ResumeValues) {
     console.log("Form Submitted:", data);
     // Later: This is where we will send data to the PDF generator
+    onUpdate(data);
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 max-w-7xl mx-auto">
+    <div className="w-full">
       
       {/* LEFT COLUMN: The Editor */}
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            
+        <Accordion type="multiple"  defaultValue={["personal-info"]}>
+          <AccordionItem value="personal-info" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Personal Info</AccordionTrigger>
+          <AccordionContent className="space-y-4">
             {/* FULL NAME INPUT */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Full Name</label>
+              <label className="text-sm font-medium">Full Name <span className="text-red-500">*</span></label>
+              {/*..form.register to get all of the data in the form and handle validation like onChange or onBlur */}
               <Input 
                 {...form.register("personalInfo.fullName")} 
                 placeholder="John Doe" 
-              />
+                />
               {/* Error Message: Shows up if Zod validation fails */}
               {form.formState.errors.personalInfo?.fullName && (
                 <p className="text-red-500 text-xs">
-                  {form.formState.errors.personalInfo.fullName.message}
+                  {form.formState.errors.personalInfo?.fullName.message}
                 </p>
               )}
             </div>
-
             {/* EMAIL INPUT */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
+            <div className="space-y-s">
+              <label className="text-sm font-medium">Email <span className="text-red-500">*</span></label>
               <Input 
                 {...form.register("personalInfo.email")} 
                 placeholder="john@example.com" 
-              />
+                />
               {form.formState.errors.personalInfo?.email && (
                 <p className="text-red-500 text-xs">
-                  {form.formState.errors.personalInfo.email.message}
+                  {form.formState.errors.personalInfo?.email.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Phone <span className="text-gray-400 text-xs">(optional)</span></label>
+              <Input {...form.register("personalInfo.phone")} placeholder="(123) 456-7890" />
+              {form.formState.errors.personalInfo?.phone && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.phone.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Location <span className="text-red-500">*</span></label>
+              <Input {...form.register("personalInfo.location")} placeholder="City, State, Country" />
+              {form.formState.errors.personalInfo?.location && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.location.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Summary <span className="text-red-500">*</span></label>
+              <Input {...form.register("personalInfo.summary")} placeholder = "A brief summary about what you do" />
+              {form.formState.errors.personalInfo?.summary && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.summary.message}
+                </p>
+              )}
+              
+            </div>
+            <div>
+              <label className="text-sm font-medium">Linkedin <span className="text-gray-400 text-xs">(optional)</span></label>
+              <Input {...form.register("personalInfo.linkedin")} placeholder="linkedin.com/in/username" />
+              {form.formState.errors.personalInfo?.linkedin && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.linkedin.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm font-medium">Website <span className="text-gray-400 text-xs">(optional)</span></label>
+              <Input {...form.register("personalInfo.website")} placeholder="https://example.com" />
+              {form.formState.errors.personalInfo?.website && (
+                <p className="text-red-500 text-xs">
+                  {form.formState.errors.personalInfo?.website.message}
                 </p>
               )}
             </div>
 
-          </CardContent>
-        </Card>
+          </AccordionContent>
+          </AccordionItem>
 
-        {/* We will add Experience Section here next */}
+          {/* EXPERIENCE SECTION */}
+          <AccordionItem value="experience" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Experience</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {experienceFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Experience {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Company <span className="text-red-500">*</span></label>
+                    <Input
+                      {...form.register(`experience.${index}.company`)}
+                      placeholder="Company name"
+                    />
+                    {form.formState.errors.experience?.[index]?.company && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.experience[index]?.company?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Role <span className="text-red-500">*</span></label>
+                    <Input
+                      {...form.register(`experience.${index}.role`)}
+                      placeholder="Software Engineer"
+                    />
+                    {form.formState.errors.experience?.[index]?.role && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.experience[index]?.role?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Start Date <span className="text-red-500">*</span></label>
+                      <Input
+                        {...form.register(`experience.${index}.startDate`)}
+                        placeholder="Jan 2023"
+                      />
+                      {form.formState.errors.experience?.[index]?.startDate && (
+                        <p className="text-red-500 text-xs">
+                          {form.formState.errors.experience[index]?.startDate?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">End Date <span className="text-gray-400 text-xs">(optional)</span></label>
+                      <Input
+                        {...form.register(`experience.${index}.endDate`)}
+                        placeholder="Present"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium ">Currently Working Here: </label>
+                      {/* Checkbox to indicate if the user is currently working in this role */}
+                      <input type = "checkbox" {...form.register(`experience.${index}.current`)} className='h-3 w-5 text-indigo-600 rounded border-gray-300' />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <JobDescription JobIndex={index} control={form.control as never} />
+                    <Button variant="outline" type="button" onClick={() => removeExperience(index)} className= "mt-2">
+                    Remove Experience
+                  </Button>
+                  </div>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendExperience({
+                    id: crypto.randomUUID(),
+                    company: "",
+                    role: "",
+                    startDate: "",
+                    endDate: "",
+                    current: false,
+                    description: [],
+                    rawInput: "",
+                    isGenerating: false,
+                  })
+                }
+              >
+                + Add Experience
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="skills" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Skills</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {skillsFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4"> 
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Skill {index + 1}</span>
+                    <div>
+                      <Input {...form.register(`skills.${index}.skills`)} placeholder="e.g. JavaScript, React, Node.js" />
+                    </div>
+                    <Button variant="outline" type="button" onClick={() => removeSkills(index)}>
+                      Remove Skill
+                    </Button>
+                  </div>
+                </div>
+              ))}
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  onClick={() => appendSkills({ skills: [] })}>
+                    + Add Skill
+                    </Button>
+            </AccordionContent>
+          </AccordionItem>
+          {/* EDUCATION SECTION */}
+          <AccordionItem value="education" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Education</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {educationFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Education {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Institution <span className="text-red-500">*</span></label>
+                    <Input
+                      {...form.register(`education.${index}.institution`)}
+                      placeholder="University name"
+                    />
+                    {form.formState.errors.education?.[index]?.institution && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.education[index]?.institution?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Degree <span className="text-red-500">*</span></label>
+                    <Input
+                      {...form.register(`education.${index}.degree`)}
+                      placeholder="Bachelor's, Master's, etc."
+                    />
+                    {form.formState.errors.education?.[index]?.degree && (
+                      <p className="text-red-500 text-xs">
+                        {form.formState.errors.education[index]?.degree?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Field of Study <span className="text-gray-400 text-xs">(optional)</span></label>
+                    <Input
+                      {...form.register(`education.${index}.fieldOfStudy`)}
+                      placeholder="Computer Science"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Start Date <span className="text-red-500">*</span></label>
+                      <Input
+                        {...form.register(`education.${index}.startDate`)}
+                        placeholder="Sep 2019"
+                      />
+                      {form.formState.errors.education?.[index]?.startDate && (
+                        <p className="text-red-500 text-xs">
+                          {form.formState.errors.education[index]?.startDate?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">End Date <span className="text-gray-400 text-xs">(Optional)</span></label>
+                      <Input
+                        {...form.register(`education.${index}.endDate`)}
+                        placeholder="May 2023"
+                      />
+                    </div>
+                  </div>
+                  {/* Education description bullets component */}
+                  <EducationDescription EducationIndex={index} control={form.control as never} />
+                  <Button variant="outline" type="button" onClick={() => removeEducation(index)}>
+                    Remove Education
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendEducation({
+                    id: crypto.randomUUID(),
+                    institution: "",
+                    degree: "",
+                    fieldOfStudy: "",
+                    startDate: "",
+                    endDate: "",
+                    current: false,
+                    description: [],
+                  })
+                }
+              >
+                + Add Education
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
+        
+          {/* Projects Section */}
+          <AccordionItem value="projects" className="shadow-md rounded-md p-4">
+            <AccordionTrigger>Projects</AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {projectFields.map((field, index) => (
+                <div key={field.id} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Project {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Project Title <span className="text-red-500">*</span></label>
+                    <Input {...form.register(`projects.${index}.title`)} placeholder="Project title" />
+                    {form.formState.errors.projects?.[index]?.title && (
+                      <p className="text-red-500 text-xs">{form.formState.errors.projects[index]?.title?.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Role <span className="text-red-500">*</span></label>
+                    <Input {...form.register(`projects.${index}.role`)} placeholder="Your role" />
+                    {form.formState.errors.projects?.[index]?.role && (
+                      <p className="text-red-500 text-xs">{form.formState.errors.projects[index]?.role?.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Start Date <span className="text-red-500">*</span></label>
+                    <Input {...form.register(`projects.${index}.startDate`)} placeholder="Jan 2024" />
+                    {form.formState.errors.projects?.[index]?.startDate && (
+                      <p className="text-red-500 text-xs">{form.formState.errors.projects[index]?.startDate?.message}</p>
+                    )}
+                  </div>
+
+                  <ProjectDescription ProjectIndex={index} control={form.control as never} />
+
+                  <Button variant="outline" type="button" onClick={() => removeProject(index)}>
+                    Remove Project
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  appendProject({
+                    id: crypto.randomUUID(),
+                    title: "",
+                    role: "",
+                    startDate: "",
+                    description: [],
+                  })
+                }
+              >
+                + Add Project
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>
+        
       </div>
-
-      {/* RIGHT COLUMN: The "Preview" (Raw Data for now) */}
-      <div className="bg-slate-950 text-slate-50 p-6 rounded-lg font-mono text-sm h-fit sticky top-8">
-        <h3 className="text-xl font-bold mb-4 text-green-400">Live State Preview</h3>
-        <p className="text-slate-400 mb-4">
-          As you type on the left, this updates instantly. 
-          This is the data we will feed into the PDF engine.
-        </p>
-        <pre className="whitespace-pre-wrap">
-          {JSON.stringify(formValues, null, 2)}
-        </pre>
-      </div>
-
     </div>
   );
 }

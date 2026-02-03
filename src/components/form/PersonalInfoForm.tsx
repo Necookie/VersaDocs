@@ -6,7 +6,7 @@ interface PersonalInfoFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
 }
-
+// Personal Info Form Component
 export function PersonalInfoForm({ form }: PersonalInfoFormProps) {
   return (
     <div className="space-y-4">

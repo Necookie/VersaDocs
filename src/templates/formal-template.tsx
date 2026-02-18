@@ -127,16 +127,16 @@ export default function FormalTemplate({data}: TemplateProps) {
                 </View>
                 
                 {/* Summary Section */}
-                <View style ={styles.sectionTitle}>
-                    <Text>Summary</Text>
+                <View style ={data.personalInfo.summary ? styles.sectionTitle : undefined}>
+                    <Text>{data.personalInfo.summary ? "Summary" : ""}</Text>
                 </View>
 
                 <Text>{data.personalInfo.summary}</Text>
                 <View style = {styles.jobBlock}></View>
 
                  {/* Experience Section */}
-                <View style = {styles.sectionTitle}>
-                    <Text>Experience</Text>
+                <View style ={data.experience && data.experience.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.experience && data.experience.length ? "Experience" : ""}</Text>
                 </View>
 
                 <View style = {styles.jobHeader}>
@@ -163,8 +163,8 @@ export default function FormalTemplate({data}: TemplateProps) {
                     ))}
                 </View>
                 {/* Education Section */}
-                <View style = {styles.sectionTitle}>
-                    <Text>Education</Text>
+                <View style ={data.education && data.education.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.education && data.education.length ? "Education" : ""}</Text>
                 </View>
 
                 <View style = {styles.jobHeader}>
@@ -192,11 +192,11 @@ export default function FormalTemplate({data}: TemplateProps) {
                 </View>
                 {/*Skills Section */}
 
-                <View style = {styles.sectionTitle}>
-                    <Text>Skills</Text>
+                <View style ={data.skills && data.skills.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.skills && data.skills.length ? "Skills" : ""}</Text>
                 </View>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 4,}}>
-                    {data.skills.map((skill, index) => (
+                    {data.skills && data.skills.map((skill, index) => (
                         <View key={index} style={{ flexDirection: 'row', width: '30%' }}>
                             <Text style={styles.bulletDot}>•</Text>
                             <Text style={styles.skills}>{skill.skills}</Text>
@@ -204,8 +204,8 @@ export default function FormalTemplate({data}: TemplateProps) {
                     ))}
                 </View>
                 {/* Projects Section */}
-                <View style = {styles.sectionTitle}>
-                    <Text>Projects</Text>
+                <View style ={data.projects && data.projects.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.projects && data.projects.length ? "Projects" : ""}</Text>
                 </View>
 
                 <View style = {styles.jobHeader}>

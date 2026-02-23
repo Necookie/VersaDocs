@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { PlusCircle, FileText, Clock, Settings2 } from "lucide-react"
 
+export const runtime = "edge";
+
 /**
  * The primary Dashboard view for authenticated users.
  * Displays a grid of previously generated resumes.

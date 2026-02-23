@@ -3,6 +3,8 @@ import {
   verifyClerkWebhook,
 } from "@/features/auth/clerk-webhook";
 
+export const runtime = "edge";
+
 /**
  * Endpoint: `/api/webhooks/clerk`
  * Purpose: Securely receives real-time events from Clerk (like user sign-ups or deletions).

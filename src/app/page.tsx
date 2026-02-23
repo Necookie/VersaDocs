@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { Download, LayoutTemplate, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
+export const runtime = "edge";
+
 /**
  * Root Home Page (`/`) - The application's main landing page.
  * Showcases features, highlights the editor's capabilities, and routes users to the editor or examples.

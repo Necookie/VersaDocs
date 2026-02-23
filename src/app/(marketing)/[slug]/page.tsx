@@ -6,6 +6,9 @@ type MarketingPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export const runtime = "edge";
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return Object.keys(marketingPages).map((slug) => ({ slug }));
 }

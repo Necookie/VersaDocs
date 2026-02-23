@@ -2,11 +2,18 @@
 
 import { Input } from "@/components/ui/input";
 
+/**
+ * Props for the PersonalInfoForm component.
+ */
 interface PersonalInfoFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: any; // Standard React Hook Form control instance
 }
-// Personal Info Form Component
+
+/**
+ * Sub-form for collecting a user's basic personal and contact information.
+ * All inputs are automatically registered to the parent React Hook Form instance.
+ */
 export function PersonalInfoForm({ form }: PersonalInfoFormProps) {
   return (
     <div className="space-y-4">

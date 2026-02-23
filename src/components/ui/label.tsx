@@ -5,6 +5,10 @@ import * as LabelPrimitive from "@radix-ui/react-label"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Represents a standard form label.
+ * Accessible wrapper utilizing `@radix-ui/react-label`.
+ */
 function Label({
   className,
   ...props

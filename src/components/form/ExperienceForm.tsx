@@ -5,19 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { JobDescription } from "@/components/Jobdescription";
 
+/**
+ * Props for the ExperienceForm component.
+ */
 interface ExperienceFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: any; // Standard React Hook Form control instance
 }
-// Experience Form Component
+
+/**
+ * Sub-form component for managing a dynamic list of past and current work experiences.
+ * Leverages `useFieldArray` from react-hook-form to power addition and removal.
+ */
 export function ExperienceForm({ form }: ExperienceFormProps) {
-  const {fields: experienceFields, append: appendExperience, remove: removeExperience, } = useFieldArray({
+  // 1. Setup the field array targeting 'experience' in the schema schema
+  const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({
     control: form.control,
     name: "experience",
   });
 
   return (
     <div className="space-y-4">
+      {/* 2. Map through existing experience entries to generate form blocks */}
       {experienceFields.map((field, index) => (
         <div key={field.id} className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
@@ -56,7 +65,7 @@ export function ExperienceForm({ form }: ExperienceFormProps) {
             )}
           </div>
 
-          {/* DATE INPUTS */}
+          {/* DATE INPUTS & CURRENT TOGGLE */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">
@@ -72,6 +81,7 @@ export function ExperienceForm({ form }: ExperienceFormProps) {
                 </p>
               )}
             </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium">
                 End Date <span className="text-gray-400 text-xs">(optional)</span>
@@ -81,6 +91,8 @@ export function ExperienceForm({ form }: ExperienceFormProps) {
                 placeholder="Present"
               />
             </div>
+
+            {/* Checkbox for current employment */}
             <div>
               <label className="text-sm font-medium">Currently Working Here: </label>
               <input
@@ -91,9 +103,11 @@ export function ExperienceForm({ form }: ExperienceFormProps) {
             </div>
           </div>
 
-          {/* JOB DESCRIPTION */}
+          {/* JOB DESCRIPTION (Nested Field Array for Bullet Points) */}
           <div className="space-y-2">
             <JobDescription JobIndex={index} control={form.control as never} />
+
+            {/* Delete button specific to this experience block */}
             <Button
               variant="outline"
               type="button"
@@ -106,6 +120,7 @@ export function ExperienceForm({ form }: ExperienceFormProps) {
         </div>
       ))}
 
+      {/* 3. Button to append a completely empty default schema wrapper representing a new job */}
       <Button
         type="button"
         variant="outline"

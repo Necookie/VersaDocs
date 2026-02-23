@@ -5,19 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { EducationDescription } from "@/components/EducationDescription";
 
+/**
+ * Props for the EducationForm component.
+ */
 interface EducationFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: any; // Standard React Hook Form control instance
 }
 
+/**
+ * Sub-form component for managing a dynamic list of education experiences.
+ * Utilizes `useFieldArray` to allow users to add, remove, and update multiple entries.
+ */
 export function EducationForm({ form }: EducationFormProps) {
-  const {fields: educationFields,append: appendEducation,remove: removeEducation, } = useFieldArray({
+  // 1. Setup the field array for the 'education' array in the resume schema
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
     control: form.control,
     name: "education",
   });
 
   return (
     <div className="space-y-4">
+      {/* 2. Map through each education entry saved so far */}
       {educationFields.map((field, index) => (
         <div key={field.id} className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
@@ -94,15 +103,17 @@ export function EducationForm({ form }: EducationFormProps) {
             </div>
           </div>
 
-          {/* EDUCATION DESCRIPTION */}
+          {/* EDUCATION DESCRIPTION (Nested Field Array for Bullet Points) */}
           <EducationDescription EducationIndex={index} control={form.control as never} />
 
+          {/* REMOVE BUTTON configuration */}
           <Button variant="outline" type="button" onClick={() => removeEducation(index)}>
             Remove Education
           </Button>
         </div>
       ))}
 
+      {/* 3. Button to append a completely empty schema template object to education */}
       <Button
         type="button"
         variant="outline"

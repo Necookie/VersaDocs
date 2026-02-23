@@ -4,12 +4,25 @@ import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+/**
+ * Props for ProjectDescription component.
+ */
 interface ProjectDescriptionProps {
+  /** 
+   * The array index of the specific project entry
+   */
   ProjectIndex: number;
+  /** 
+   * The `control` object from React Hook Form
+   */
   control: Control<ResumeValues>;
 }
 
+/**
+ * Component that manages a dynamic array of bullet points describing a specific project.
+ */
 export function ProjectDescription({ ProjectIndex, control }: ProjectDescriptionProps) {
+  // 1. Provide dynamic mapping to add or remove project description fields
   const { fields: descriptionFields, append: appendDescription, remove: removeDescription } = useFieldArray({
     control,
     name: `projects.${ProjectIndex}.description` as never,
@@ -21,6 +34,7 @@ export function ProjectDescription({ ProjectIndex, control }: ProjectDescription
         <label className="text-sm font-medium">Project Description <span className="text-gray-400 text-xs">(Bullet points)</span></label>
       </div>
 
+      {/* 2. Map existing bullet points into text inputs */}
       {descriptionFields.map((desc, descIndex) => (
         <div key={desc.id} className="flex items-center gap-2 mt-1">
           <Input {...control.register(`projects.${ProjectIndex}.description.${descIndex}` as never)} placeholder="Describe this point" />
@@ -36,6 +50,7 @@ export function ProjectDescription({ ProjectIndex, control }: ProjectDescription
         </div>
       ))}
 
+      {/* 3. Button to append a new bullet point to the project */}
       <Button
         type="button"
         variant="outline"

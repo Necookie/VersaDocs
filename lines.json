@@ -1,0 +1,134 @@
+[
+  {
+    "file": "src\\templates\\formal-template.tsx",
+    "lines": 236
+  },
+  {
+    "file": "src\\app\\globals.css",
+    "lines": 166
+  },
+  {
+    "file": "src\\components\\resume-form.tsx",
+    "lines": 163
+  },
+  {
+    "file": "src\\components\\form\\ExperienceForm.tsx",
+    "lines": 131
+  },
+  {
+    "file": "src\\components\\form\\EducationForm.tsx",
+    "lines": 127
+  },
+  {
+    "file": "src\\app\\page.tsx",
+    "lines": 116
+  },
+  {
+    "file": "src\\components\\form\\PersonalInfoForm.tsx",
+    "lines": 115
+  },
+  {
+    "file": "src\\app\\editor\\page.tsx",
+    "lines": 109
+  },
+  {
+    "file": "src\\components\\Footer.tsx",
+    "lines": 96
+  },
+  {
+    "file": "src\\components\\form\\ProjectsForm.tsx",
+    "lines": 93
+  },
+  {
+    "file": "src\\components\\ui\\card.tsx",
+    "lines": 93
+  },
+  {
+    "file": "src\\lib\\schemas\\resume.ts",
+    "lines": 69
+  },
+  {
+    "file": "src\\components\\ui\\accordion.tsx",
+    "lines": 67
+  },
+  {
+    "file": "src\\components\\ui\\button.tsx",
+    "lines": 63
+  },
+  {
+    "file": "src\\components\\Jobdescription.tsx",
+    "lines": 55
+  },
+  {
+    "file": "src\\components\\ProjectDescription.tsx",
+    "lines": 52
+  },
+  {
+    "file": "src\\components\\EducationDescription.tsx",
+    "lines": 50
+  },
+  {
+    "file": "src\\components\\form\\SkillsForm.tsx",
+    "lines": 47
+  },
+  {
+    "file": "src\\components\\resume-download-button.tsx",
+    "lines": 38
+  },
+  {
+    "file": "src\\hooks\\use-resume-form.ts",
+    "lines": 36
+  },
+  {
+    "file": "src\\components\\Navbar.tsx",
+    "lines": 33
+  },
+  {
+    "file": "src\\components\\ui\\checkbox.tsx",
+    "lines": 33
+  },
+  {
+    "file": "src\\app\\layout.tsx",
+    "lines": 32
+  },
+  {
+    "file": "src\\app\\favicon.ico",
+    "lines": 31
+  },
+  {
+    "file": "src\\components\\ui\\separator.tsx",
+    "lines": 29
+  },
+  {
+    "file": "src\\components\\resume-preview.tsx",
+    "lines": 25
+  },
+  {
+    "file": "src\\components\\ui\\label.tsx",
+    "lines": 25
+  },
+  {
+    "file": "src\\components\\ui\\input.tsx",
+    "lines": 22
+  },
+  {
+    "file": "src\\middleware.ts",
+    "lines": 19
+  },
+  {
+    "file": "src\\app\\sign-in\\page.tsx",
+    "lines": 9
+  },
+  {
+    "file": "src\\app\\sign-up\\page.tsx",
+    "lines": 9
+  },
+  {
+    "file": "src\\lib\\utils.ts",
+    "lines": 7
+  },
+  {
+    "file": "src\\components\\form\\index.ts",
+    "lines": 6
+  }
+]

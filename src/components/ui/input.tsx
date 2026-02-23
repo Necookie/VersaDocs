@@ -2,6 +2,10 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Standard text input component styled with Tailwind CSS.
+ * Forwards all standard input HTML attributes.
+ */
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input

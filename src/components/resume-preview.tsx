@@ -1,24 +1,38 @@
-"use-client" //  indicates that this file is a client-side component in a Next.js application.
+"use client" // Indicates that this file is a client-side component in a Next.js application
 
 import { PDFViewer } from "@react-pdf/renderer"
 import { ResumeValues } from "@/lib/schemas/resume"
 import FormalTemplate from "@/templates/formal-template"
 
+/**
+ * Props for ResumePreview component
+ */
 interface ResumePreviewProps {
     resumeData: ResumeValues
 }
 
+/**
+ * Component that renders a live preview of the generated resume PDF using @react-pdf/renderer.
+ * React-PDF renders an iframe natively.
+ * 
+ * @param {ResumePreviewProps} props - The complete state of the user's customized resume.
+ */
 export default function ResumePreview({ resumeData }: ResumePreviewProps) {
 
     return (
-        <div className= "w-full h-full ">
-            {/* key={JSON.stringify(data)} This forces the PDF to fully re-render whenever data changes. Without this, the PDF engine sometimes "lagging" behind your typing*/}
-            <PDFViewer 
-            key ={JSON.stringify(resumeData)}
-            className="w-full h-full border-0 "
-            showToolbar={false}
+        <div className="w-full h-full">
+            {/* 
+              key={JSON.stringify(resumeData)} 
+              This forces the PDFViewer to fully re-render whenever the form data changes. 
+              Without this key prop, the PDF engine can lag behind the user's typing.
+            */}
+            <PDFViewer
+                key={JSON.stringify(resumeData)}
+                className="w-full h-full border-0"
+                showToolbar={false}
             >
-                <FormalTemplate data={resumeData}/>
+                {/* Renders the specific customized React-PDF layout */}
+                <FormalTemplate data={resumeData} />
             </PDFViewer>
         </div>
     )

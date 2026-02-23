@@ -1,4 +1,4 @@
-"use client"; // <--- This tells Next.js: "This runs in the browser, not the server"
+"use client"; // Tells Next.js: "This runs in the browser, not the server"
 
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,71 +14,88 @@ import {
   ProjectsForm,
 } from "@/components/form";
 
-
 const STORAGE_KEY = "versadocs-resume-data";
 
+/**
+ * Props for the main ResumeForm layout.
+ */
 interface ResumeFormProps {
-  // onUpdate function prop to update whenever the form data changes and returns void after updating
-    onUpdate: (data: ResumeValues) => void;
+  /**
+   * Callback fired on every form update (keystrokes, field changes).
+   * This pushes the live data back up to the parent page so it can be passed to the previewer.
+   */
+  onUpdate: (data: ResumeValues) => void;
 }
 
+/**
+ * Helper function to instantiate default or locally cached resume form values.
+ * Parses the data securely, falling back to a clean empty schema if parsing fails.
+ */
 function getInitialValues(): ResumeValues {
-  // if window is in the browser get data from local storage and if there is data parse it and return it else if window is not in the browser return undefined
-    if (typeof window !== "undefined") {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            try {
-                return JSON.parse(saved);
-            } catch (e) {
-                console.error("Failed to parse saved resume data", e);
-            }
-        }
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse saved resume data", e);
+      }
     }
-    // Default empty values of the zod schema
-    return {
-        personalInfo: {
-            fullName: "",
-            email: "",
-            phone: undefined,
-            location: "",
-            summary: "",
-            linkedin: "",
-            website: "",
-        },
-        experience: [],
-        skills: [],
-      education: [],
-      projects: [],
-    };
+  }
+  // Default empty values corresponding to the zod schema layout
+  return {
+    personalInfo: {
+      fullName: "",
+      email: "",
+      phone: undefined,
+      location: "",
+      summary: "",
+      linkedin: "",
+      website: "",
+    },
+    experience: [],
+    skills: [],
+    education: [],
+    projects: [],
+  };
 }
 
+/**
+ * The primary form container for capturing user details.
+ * Contains sub-form sections rendered inside of Accordion panels.
+ * Features auto-saving via `useEffect` tracking form values.
+ */
 export function ResumeForm({ onUpdate }: ResumeFormProps) {
-  // 1. Setup the form 
-  // We use Zod to validate and type the form data
+  // 1. Setup the form using React Hook Form & Zod for schema validation
   const form = useForm({
-    //resolver to connect the schema to the form and handles validation
     resolver: zodResolver(resumeSchema),
     defaultValues: getInitialValues(),
   });
 
-  // 2. Watch the data (so we can see it update live!)
-  // This is vital for your <500ms preview requirement later
+  // 2. Watch the data to get live updates
+  // This live state powers the <500ms preview reload
   const formValues = useWatch({
     control: form.control,
   });
- //useEffect to update the form values everytime there is a change in the form values
+
+  // Sync state upward to the Editor Page component every time the watched form variables change.
   useEffect(() => {
     if (onUpdate) {
-      onUpdate(formValues as ResumeValues); // Notify parent of changes
+      onUpdate(formValues as ResumeValues);
     }
   }, [formValues, onUpdate]);
 
+  /**
+   * Handler for explicit save clicks
+   */
   function onSubmit(data: ResumeValues) {
     console.log("Form Submitted:", data);
-    // Later: This is where we will send data to the PDF generator
     onUpdate(data);
   }
 
+  /**
+   * Resets the entire form schema and clears local storage caches.
+   */
   function clearAll() {
     const empty: ResumeValues = {
       personalInfo: {
@@ -107,17 +124,21 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
 
   return (
     <div className="w-full">
-      
-      {/* LEFT COLUMN: The Editor */}
+      {/* LEFT COLUMN: The Editor Panels */}
       <div className="space-y-6">
+        {/* Action Toolbar */}
         <div className="flex justify-end">
           <Button variant="outline" size="sm" onClick={clearAll} className="mr-2">
             Clear All
           </Button>
         </div>
-        <Accordion type="multiple"  defaultValue={["personal-info"]}>
+
+        {/* Fillable Form Sections inside Accordions */}
+        <Accordion type="multiple" defaultValue={["personal-info"]}>
+
+          {/* PERSONAL INFO SECTION */}
           <AccordionItem value="personal-info" className="shadow-md rounded-md p-4">
-            <AccordionTrigger >Personal Info</AccordionTrigger>
+            <AccordionTrigger>Personal Info</AccordionTrigger>
             <AccordionContent>
               <PersonalInfoForm form={form} />
             </AccordionContent>
@@ -146,7 +167,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               <EducationForm form={form} />
             </AccordionContent>
           </AccordionItem>
-        
+
           {/* PROJECTS SECTION */}
           <AccordionItem value="projects" className="shadow-md rounded-md p-4">
             <AccordionTrigger>Projects</AccordionTrigger>
@@ -154,9 +175,11 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
               <ProjectsForm form={form} />
             </AccordionContent>
           </AccordionItem>
+
         </Accordion>
+
+        {/* Save Button */}
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>
-        
       </div>
     </div>
   );

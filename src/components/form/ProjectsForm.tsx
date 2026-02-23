@@ -5,19 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ProjectDescription } from "@/components/ProjectDescription";
 
+/**
+ * Props for the ProjectsForm component.
+ */
 interface ProjectsFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any;
+  form: any; // Standard React Hook Form control instance
 }
 
+/**
+ * Sub-form component for managing a dynamic list of projects.
+ * Leverages `useFieldArray` to allow adding and removing individual project entries.
+ */
 export function ProjectsForm({ form }: ProjectsFormProps) {
-  const {fields: projectFields, append: appendProject, remove: removeProject, } = useFieldArray({
+  // 1. Setup the field array for 'projects' defined in the resume schema
+  const { fields: projectFields, append: appendProject, remove: removeProject } = useFieldArray({
     control: form.control,
     name: "projects",
   });
 
   return (
     <div className="space-y-4">
+      {/* 2. Map through existing projects to generate form blocks */}
       {projectFields.map((field, index) => (
         <div key={field.id} className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
@@ -63,15 +72,17 @@ export function ProjectsForm({ form }: ProjectsFormProps) {
             )}
           </div>
 
-          {/* PROJECT DESCRIPTION */}
+          {/* PROJECT DESCRIPTION (Nested Field Array for Bullet Points) */}
           <ProjectDescription ProjectIndex={index} control={form.control as never} />
 
+          {/* Delete button specific to this project block */}
           <Button variant="outline" type="button" onClick={() => removeProject(index)}>
             Remove Project
           </Button>
         </div>
       ))}
 
+      {/* 3. Button to append a completely empty default schema wrapper representing a new project */}
       <Button
         type="button"
         variant="outline"

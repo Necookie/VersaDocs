@@ -2,10 +2,14 @@ import { Button } from '@/components/ui/button'
 import { FileText } from 'lucide-react'
 import Link from 'next/link'
 
+/**
+ * Standard global Footer component used across the application.
+ * Contains a Call-to-Action (CTA) section and standard footer navigation links.
+ */
 export default function Footer() {
   return (
     <footer>
-      {/* CTA Section */}
+      {/* CTA Section - Encourages visitors to start using the app */}
       <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-purple-700 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -20,11 +24,11 @@ export default function Footer() {
         </div>
       </section>
 
-      {/* Footer Links Section */}
+      {/* Footer Links Section - Navigation and Company Information */}
       <section className="bg-gray-900 text-gray-300 py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            {/* Brand */}
+            {/* Brand Information */}
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <FileText className="size-6 text-white" />
@@ -35,7 +39,7 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Product Links */}
+            {/* Product Navigation Links */}
             <div>
               <h3 className="text-white font-semibold mb-4">Product</h3>
               <ul className="space-y-2">
@@ -51,7 +55,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Company Links */}
+            {/* Company Navigation Links */}
             <div>
               <h3 className="text-white font-semibold mb-4">Company</h3>
               <ul className="space-y-2">
@@ -84,7 +88,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Copyright */}
+          {/* Copyright text */}
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
             <p>© 2026 VersaDocs. All rights reserved.</p>
           </div>

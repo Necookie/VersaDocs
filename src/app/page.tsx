@@ -5,17 +5,22 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { Download, LayoutTemplate, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
+/**
+ * Root Home Page (`/`) - The application's main landing page.
+ * Showcases features, highlights the editor's capabilities, and routes users to the editor or examples.
+ */
 export default function Home() {
   return (
     <main>
-      <section className = 'fixed top-0 left-0 w-full z-50 '>
+      {/* 1. Navbar Container (Fixed at top) */}
+      <section className='fixed top-0 left-0 w-full z-50'>
         <Navbar />
       </section>
 
-     
+      {/* 2. Hero Section: Primary call to action and value proposition */}
       <section className="bg-blue-50 py-27 px-4">
         <div className="max-w-4xl mx-auto text-center">
-         
+
           <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-blue-600 mb-8 shadow-sm">
             <Sparkles className="size-4" />
             AI-Powered Resume Builder
@@ -29,7 +34,7 @@ export default function Home() {
             Build professional, ATS-friendly resumes with our intuitive builder. Choose
             from multiple templates, customize colors, and download as PDF instantly.
           </p>
-         
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             <Button asChild size="lg" className="bg-gray-900 hover:bg-gray-800 text-white px-8">
               <Link href="/editor">Start Building Free</Link>
@@ -44,16 +49,18 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      {/* 3. Featured Image/Template Showcase Placeholder */}
       <section>
-        <div className = 'text-center'>
+        <div className='text-center'>
           <p>Featured image here to showcase the templates</p>
         </div>
       </section>
 
-      
+      {/* 4. Features Grid: Highlights core benefits */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
-         
+
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Everything You Need to Land Your Dream Job
@@ -63,8 +70,8 @@ export default function Home() {
             </p>
           </div>
 
-          
           <div className="grid md:grid-cols-3 gap-6">
+            {/* Template Feature */}
             <Card className="bg-white border-gray-200">
               <CardContent className="pt-6">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
@@ -79,6 +86,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
+            {/* AI Suggestion Feature */}
             <Card className="bg-white border-gray-200">
               <CardContent className="pt-6">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
@@ -93,6 +101,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
+            {/* Export Feature */}
             <Card className="bg-white border-gray-200">
               <CardContent className="pt-6">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
@@ -110,6 +119,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 5. Application Footer */}
       <Footer />
     </main>
   )

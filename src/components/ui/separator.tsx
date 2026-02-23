@@ -5,6 +5,10 @@ import * as SeparatorPrimitive from "@radix-ui/react-separator"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * A visual divider that separates content.
+ * Built on top of `@radix-ui/react-separator` for accessible hr elements.
+ */
 function Separator({
   className,
   orientation = "horizontal",

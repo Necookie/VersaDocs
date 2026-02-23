@@ -23,6 +23,10 @@ const STORAGE_KEY = "versadocs-resume-data";
  */
 interface ResumeFormProps {
   /**
+   * Initial data block injected from the global store.
+   */
+  defaultData: ResumeValues;
+  /**
    * Callback fired on every form update (keystrokes, field changes).
    * This pushes the live data back up to the parent page so it can be passed to the previewer.
    */
@@ -30,62 +34,15 @@ interface ResumeFormProps {
 }
 
 /**
- * Helper function to instantiate default or locally cached resume form values.
- * Parses the data securely, falling back to a clean empty schema if parsing fails.
- */
-function getInitialValues(): ResumeValues {
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved resume data", e);
-      }
-    }
-  }
-  // Default empty values corresponding to the zod schema layout
-  return {
-    templateId: "formal",
-    personalInfo: {
-      fullName: "",
-      email: "",
-      phone: undefined,
-      location: "",
-      summary: "",
-      linkedin: "",
-      website: "",
-      age: "",
-      dateOfBirth: "",
-      placeOfBirth: "",
-      civilStatus: "",
-      religion: "",
-      height: "",
-      weight: "",
-      citizenship: "",
-      fathersName: "",
-      fathersOccupation: "",
-      mothersName: "",
-      mothersOccupation: "",
-    },
-    experience: [],
-    skills: [],
-    education: [],
-    projects: [],
-    characterReferences: [],
-  };
-}
-
-/**
  * The primary form container for capturing user details.
  * Contains sub-form sections rendered inside of Accordion panels.
  * Features auto-saving via `useEffect` tracking form values.
  */
-export function ResumeForm({ onUpdate }: ResumeFormProps) {
+export function ResumeForm({ onUpdate, defaultData }: ResumeFormProps) {
   // 1. Setup the form using React Hook Form & Zod for schema validation
   const form = useForm({
     resolver: zodResolver(resumeSchema) as unknown as ReturnType<typeof zodResolver>,
-    defaultValues: getInitialValues(),
+    defaultValues: defaultData,
   });
 
   // 2. Watch the data to get live updates

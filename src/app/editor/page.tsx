@@ -5,6 +5,8 @@ import { useState, useEffect } from "react"
 import { ResumeValues } from "@/lib/schemas/resume"
 import Link from 'next/link'
 import dynamic from "next/dynamic"
+import { useResumeStore } from "@/store/useResumeStore"
+import { useDebounce } from "@/hooks/useDebounce"
 
 /**
  * Dynamically import the PDF React preview component.
@@ -83,22 +85,29 @@ function getInitialData(): ResumeValues {
 /**
  * EditorPage (`/editor`) - The core interactive workspace route.
  * Renders a split view with the ResumeForm component on the left and the live ResumePreview on the right.
- * The page maintains the top-level state of `resumeData`, passing it downwards.
+ * State is managed globally via Zustand (`useResumeStore`).
  */
 export default function EditorPage() {
-  // 1. Maintain global state of the entire resume form JSON structure
-  const [resumeData, setResumeData] = useState<ResumeValues>(getInitialData);
+  // 1. Hook into the Global Zustand Store
+  const resumeData = useResumeStore((state) => state.resumeData);
+  const setResumeData = useResumeStore((state) => state.setResumeData);
 
-  // 2. Persist state to localStorage silently across re-renders
+  // 2. Wrap the global state in our debounce hook
+  // Wait 1000ms after the user stops typing before we consider the data "stable"
+  const debouncedResumeData = useDebounce(resumeData, 1000);
+
+  // 3. Side-effect: Persist to localStorage only when the debounced state settles
+  // Note: Once the database is ready, THIS is where the API endpoint fetch goes.
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
-  }, [resumeData]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(debouncedResumeData));
+  }, [debouncedResumeData]);
 
+  // Handle template switching directly via Global State
   const handleTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setResumeData(prev => ({
-      ...prev,
+    setResumeData({
+      ...resumeData,
       templateId: e.target.value as "formal" | "biodata"
-    }));
+    });
   };
 
   return (
@@ -119,8 +128,8 @@ export default function EditorPage() {
             </div>
           </div>
 
-          {/* THE FORM: Exposes the setResumeData setter to the form's watch hook internally to push state up */}
-          <ResumeForm onUpdate={setResumeData} />
+          {/* THE FORM: Exposes the Zustand setter to the form's watch hook internally to push state up */}
+          <ResumeForm onUpdate={setResumeData} defaultData={resumeData} />
         </div>
       </section>
 

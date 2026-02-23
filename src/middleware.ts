@@ -5,8 +5,9 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
  * - `/`: Landing page
  * - `/sign-in(.*)`: Sign in page and its subroutes
  * - `/sign-up(.*)`: Sign up page and its subroutes
+ * - `/api/webhooks(.*)`: Clerk webhook ingestion endpoint
  */
-const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)']);
+const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/api/webhooks(.*)']);
 
 /**
  * Main Clerk authentication middleware hook.

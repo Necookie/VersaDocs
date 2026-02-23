@@ -6,3 +6,5 @@ export { ExperienceForm } from "./ExperienceForm";
 export { SkillsForm } from "./SkillsForm";
 export { EducationForm } from "./EducationForm";
 export { ProjectsForm } from "./ProjectsForm";
+export { BiodataInfoForm } from "./BiodataInfoForm";
+export { CharacterReferencesForm } from "./CharacterReferencesForm";

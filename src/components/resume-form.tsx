@@ -12,6 +12,8 @@ import {
   SkillsForm,
   EducationForm,
   ProjectsForm,
+  BiodataInfoForm,
+  CharacterReferencesForm,
 } from "@/components/form";
 
 const STORAGE_KEY = "versadocs-resume-data";
@@ -44,6 +46,7 @@ function getInitialValues(): ResumeValues {
   }
   // Default empty values corresponding to the zod schema layout
   return {
+    templateId: "formal",
     personalInfo: {
       fullName: "",
       email: "",
@@ -52,11 +55,24 @@ function getInitialValues(): ResumeValues {
       summary: "",
       linkedin: "",
       website: "",
+      age: "",
+      dateOfBirth: "",
+      placeOfBirth: "",
+      civilStatus: "",
+      religion: "",
+      height: "",
+      weight: "",
+      citizenship: "",
+      fathersName: "",
+      fathersOccupation: "",
+      mothersName: "",
+      mothersOccupation: "",
     },
     experience: [],
     skills: [],
     education: [],
     projects: [],
+    characterReferences: [],
   };
 }
 
@@ -68,7 +84,7 @@ function getInitialValues(): ResumeValues {
 export function ResumeForm({ onUpdate }: ResumeFormProps) {
   // 1. Setup the form using React Hook Form & Zod for schema validation
   const form = useForm({
-    resolver: zodResolver(resumeSchema),
+    resolver: zodResolver(resumeSchema) as unknown as ReturnType<typeof zodResolver>,
     defaultValues: getInitialValues(),
   });
 
@@ -88,9 +104,9 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
   /**
    * Handler for explicit save clicks
    */
-  function onSubmit(data: ResumeValues) {
+  function onSubmit(data: any) {
     console.log("Form Submitted:", data);
-    onUpdate(data);
+    onUpdate(data as ResumeValues);
   }
 
   /**
@@ -98,6 +114,7 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
    */
   function clearAll() {
     const empty: ResumeValues = {
+      templateId: "formal",
       personalInfo: {
         fullName: "",
         email: "",
@@ -106,11 +123,24 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
         summary: "",
         linkedin: "",
         website: "",
+        age: "",
+        dateOfBirth: "",
+        placeOfBirth: "",
+        civilStatus: "",
+        religion: "",
+        height: "",
+        weight: "",
+        citizenship: "",
+        fathersName: "",
+        fathersOccupation: "",
+        mothersName: "",
+        mothersOccupation: "",
       },
       experience: [],
       skills: [],
       education: [],
       projects: [],
+      characterReferences: [],
     };
 
     form.reset(empty);
@@ -173,6 +203,22 @@ export function ResumeForm({ onUpdate }: ResumeFormProps) {
             <AccordionTrigger>Projects</AccordionTrigger>
             <AccordionContent>
               <ProjectsForm form={form} />
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* BIODATA INFO SECTION */}
+          <AccordionItem value="biodata-info" className="shadow-md rounded-md p-4 border-l-4 border-blue-500">
+            <AccordionTrigger>Biodata Details</AccordionTrigger>
+            <AccordionContent>
+              <BiodataInfoForm form={form} />
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* CHARACTER REFERENCES SECTION */}
+          <AccordionItem value="character-references" className="shadow-md rounded-md p-4 border-l-4 border-blue-500">
+            <AccordionTrigger>Character References (Biodata)</AccordionTrigger>
+            <AccordionContent>
+              <CharacterReferencesForm form={form} />
             </AccordionContent>
           </AccordionItem>
 

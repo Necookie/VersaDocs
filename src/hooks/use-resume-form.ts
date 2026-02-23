@@ -29,11 +29,18 @@ export function useResumeForm(onUpdate: (data: ResumeValues) => void) {
       }
       // Return a structured empty default to satisfy React Hook Form
       return {
-        personalInfo: { fullName: "", email: "", location: "", summary: "" },
+        templateId: "formal",
+        personalInfo: {
+          fullName: "", email: "", location: "", summary: "",
+          age: "", dateOfBirth: "", placeOfBirth: "", civilStatus: "",
+          religion: "", height: "", weight: "", citizenship: "",
+          fathersName: "", fathersOccupation: "", mothersName: "", mothersOccupation: ""
+        },
         experience: [],
         education: [],
         skills: [],
         projects: [],
+        characterReferences: [],
       } as unknown as ResumeValues;
     },
   });
@@ -55,5 +62,6 @@ export function useResumeForm(onUpdate: (data: ResumeValues) => void) {
     education: useFieldArray({ control: form.control, name: "education" }),
     skills: useFieldArray({ control: form.control, name: "skills" }),
     projects: useFieldArray({ control: form.control, name: "projects" }),
+    characterReferences: useFieldArray({ control: form.control, name: "characterReferences" }),
   };
 }

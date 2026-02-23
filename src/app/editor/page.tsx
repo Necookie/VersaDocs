@@ -33,6 +33,7 @@ const STORAGE_KEY = "versadocs-resume-data";
  * Complete default skeleton of a resume object matching the standard ResumeValues schema.
  */
 const defaultResumeData: ResumeValues = {
+  templateId: "formal",
   personalInfo: {
     fullName: "",
     email: "",
@@ -41,11 +42,24 @@ const defaultResumeData: ResumeValues = {
     location: "",
     summary: "",
     website: "",
+    age: "",
+    dateOfBirth: "",
+    placeOfBirth: "",
+    civilStatus: "",
+    religion: "",
+    height: "",
+    weight: "",
+    citizenship: "",
+    fathersName: "",
+    fathersOccupation: "",
+    mothersName: "",
+    mothersOccupation: "",
   },
   education: [],
   skills: [],
   experience: [],
   projects: [],
+  characterReferences: [],
 };
 
 /**
@@ -80,6 +94,13 @@ export default function EditorPage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
   }, [resumeData]);
 
+  const handleTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setResumeData(prev => ({
+      ...prev,
+      templateId: e.target.value as "formal" | "biodata"
+    }));
+  };
+
   return (
     <main className="flex h-screen w-full overflow-hidden bg-slate-50">
 
@@ -106,10 +127,19 @@ export default function EditorPage() {
       {/* RIGHT PANEL: Live Visual Preview Canvas */}
       <section className="w-1/2 h-full flex flex-col">
 
-        {/* Simple Top Toolbar */}
         <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6">
           <span className="text-sm font-medium text-slate-600">Live Preview</span>
-          <div className="text-xs font-mono text-slate-400">A4 - Portrait</div>
+          <div className="flex items-center gap-4">
+            <select
+              value={resumeData.templateId}
+              onChange={handleTemplateChange}
+              className="text-sm border border-slate-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="formal">Formal Template</option>
+              <option value="biodata">Filipino Biodata</option>
+            </select>
+            <div className="text-xs font-mono text-slate-400">A4 - Portrait</div>
+          </div>
         </div>
 
         {/* Action Button Row: Download PDF Trigger */}

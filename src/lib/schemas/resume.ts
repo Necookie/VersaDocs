@@ -53,10 +53,22 @@ const projectSchema = z.object({
 });
 
 /**
+ * Character Reference Schema
+ * Necessary for the Biodata template.
+ */
+const characterReferenceSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Name is required"),
+  occupation: z.string().min(1, "Occupation is required"),
+  address: z.string().min(1, "Address is required"),
+});
+
+/**
  * Main Resume Schema
  * Combines all individual section schemas into the top-level resume structure.
  */
 export const resumeSchema = z.object({
+  templateId: z.enum(["formal", "biodata"]).default("formal"), // Track the selected template
   personalInfo: z.object({
     fullName: z.string().min(1, "Full name is required"),
     email: z.email("Invalid email address"),
@@ -65,12 +77,27 @@ export const resumeSchema = z.object({
     summary: z.string(), // Basic bio or professional summary text
     linkedin: z.string().optional(),
     website: z.string().optional(),
+
+    // Biodata specific fields
+    age: z.string().optional(),
+    dateOfBirth: z.string().optional(),
+    placeOfBirth: z.string().optional(),
+    civilStatus: z.string().optional(),
+    religion: z.string().optional(),
+    height: z.string().optional(),
+    weight: z.string().optional(),
+    citizenship: z.string().optional(),
+    fathersName: z.string().optional(),
+    fathersOccupation: z.string().optional(),
+    mothersName: z.string().optional(),
+    mothersOccupation: z.string().optional(),
   }),
   summary: z.string().optional(), // Overarching summary, if extracted outside personalInfo
   experience: z.array(experienceSchema).default([]),
   skills: z.array(SkillsSchema).default([]),
   education: z.array(educationSchema).default([]),
   projects: z.array(projectSchema).default([]),
+  characterReferences: z.array(characterReferenceSchema).default([]),
 });
 
 /**

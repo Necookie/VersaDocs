@@ -2,6 +2,7 @@
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import FormalTemplate from "@/templates/formal-template";
+import BiodataTemplate from "@/templates/biodata-template";
 import { ResumeValues } from "@/lib/schemas/resume";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ interface DownloadButtonProps {
 export const ResumeDownloadButton = ({ data }: DownloadButtonProps) => {
   return (
     <PDFDownloadLink
-      document={<FormalTemplate data={data} />}
+      document={data.templateId === "biodata" ? <BiodataTemplate data={data} /> : <FormalTemplate data={data} />}
       fileName={`${data.personalInfo.fullName || "resume"}.pdf`} // Dynamic filename based on user input
     >
       {/* The child of PDFDownloadLink provides a render state callback.

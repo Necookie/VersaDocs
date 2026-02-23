@@ -8,32 +8,36 @@ import Link from 'next/link';
  */
 export default function Navbar() {
   return (
-    <nav className='flex justify-between items-center p-5 shadow-md bg-white'>
-      {/* Brand / Logo */}
-      <div className='flex gap-2 ml-20'>
-        <p className='text-2xl font-semibold'>VersaDocs</p>
-      </div>
+    <div className="flex justify-center w-full px-4 pt-4">
+      <nav className="flex justify-between items-center px-6 py-4 w-full max-w-6xl rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md shadow-lg shadow-black/5 z-50 transition-all">
+        {/* Brand / Logo */}
+        <div className="flex gap-2">
+          <p className="text-2xl font-bold tracking-tight bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            VersaDocs
+          </p>
+        </div>
 
-      {/* Navigation Links & Authentication Controls */}
-      <div className="flex items-center gap-6">
-        {/* Only show "Sign In" and "Get Started" buttons if the user is logged out */}
-        <SignedOut>
-          <SignInButton mode="modal">
-            <button className="font-bold hover:text-blue-600">Sign in</button>
-          </SignInButton>
-          <Button asChild>
-            <Link href="/sign-up">Get Started</Link>
-          </Button>
-        </SignedOut>
+        {/* Navigation Links & Authentication Controls */}
+        <div className="flex items-center gap-6">
+          {/* Only show "Sign In" and "Get Started" buttons if the user is logged out */}
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="font-bold hover:text-blue-600">Sign in</button>
+            </SignInButton>
+            <Button asChild>
+              <Link href="/sign-up">Get Started</Link>
+            </Button>
+          </SignedOut>
 
-        {/* Only show robust navigation and the User Avatar Menu if the user is authenticated */}
-        <SignedIn>
-          <Link href="/templates" className="text-gray-600 hover:text-black">Templates</Link>
-          <Link href="/Pricing" className="text-gray-600 hover:text-black">Upgrade</Link>
-          <Link href="/editor" className="text-gray-600 hover:text-black">Editor</Link>
-          <UserButton />
-        </SignedIn>
-      </div>
-    </nav>
+          {/* Only show robust navigation and the User Avatar Menu if the user is authenticated */}
+          <SignedIn>
+            <Link href="/templates" className="text-gray-600 hover:text-black">Templates</Link>
+            <Link href="/Pricing" className="text-gray-600 hover:text-black">Upgrade</Link>
+            <Link href="/editor" className="text-gray-600 hover:text-black">Editor</Link>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </nav>
+    </div>
   );
 }

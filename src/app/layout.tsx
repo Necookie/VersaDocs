@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs';
 import "./globals.css";
 
-// Configure default sans-serif font
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Configure premium sans-serif font
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
 });
 
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider afterSignOutUrl="/">
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body className={`${jakarta.variable} ${geistMono.variable} antialiased`}>
           {children}
         </body>
       </html>

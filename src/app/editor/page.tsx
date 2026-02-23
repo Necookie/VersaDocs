@@ -102,11 +102,11 @@ export default function EditorPage() {
   };
 
   return (
-    <main className="flex h-screen w-full overflow-hidden bg-slate-50">
+    <main className="flex h-[100dvh] w-full overflow-hidden bg-[#F8FAFC]">
 
       {/* LEFT PANEL: The Settings/Input Form */}
-      <section className="w-1/2 h-full border-r border-slate-200 bg-white overflow-y-auto scrollbar-thin">
-        <div className="p-6">
+      <section className="w-1/2 h-full bg-white overflow-y-auto scrollbar-thin shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10 relative">
+        <div className="p-8 max-w-2xl mx-auto">
 
           {/* Header */}
           <div className="flex items-center mb-8">
@@ -125,25 +125,37 @@ export default function EditorPage() {
       </section>
 
       {/* RIGHT PANEL: Live Visual Preview Canvas */}
-      <section className="w-1/2 h-full flex flex-col">
+      <section className="w-1/2 h-full flex flex-col bg-slate-100/50">
 
-        <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6">
-          <span className="text-sm font-medium text-slate-600">Live Preview</span>
-          <div className="flex items-center gap-4">
-            <select
-              value={resumeData.templateId}
-              onChange={handleTemplateChange}
-              className="text-sm border border-slate-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="formal">Formal Template</option>
-              <option value="biodata">Filipino Biodata</option>
-            </select>
-            <div className="text-xs font-mono text-slate-400">A4 - Portrait</div>
+        {/* Floating Canvas Header (Replaces the basic row) */}
+        <div className="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 flex items-center justify-between px-8 shadow-sm z-20 sticky top-0">
+          <div className="flex items-center gap-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100">
+              <span className="h-2 w-2 rounded-full bg-indigo-600 animate-pulse"></span>
+            </span>
+            <span className="font-semibold text-slate-700 tracking-tight">Live Preview Canvas</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center bg-slate-100 rounded-lg p-1">
+              <span className="text-xs font-medium text-slate-500 px-3">Template:</span>
+              <select
+                value={resumeData.templateId}
+                onChange={handleTemplateChange}
+                className="text-sm font-medium border-none bg-white shadow-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition-all"
+              >
+                <option value="formal">Formal</option>
+                <option value="biodata">Biodata</option>
+              </select>
+            </div>
+            <div className="hidden lg:flex items-center gap-2">
+              <span className="h-4 w-px bg-slate-300"></span>
+              <div className="text-xs font-mono font-medium text-slate-400">A4 Document</div>
+            </div>
           </div>
         </div>
 
         {/* Action Button Row: Download PDF Trigger */}
-        <div className="flex items-center justify-end pt-5 pr-5 border-b border-slate-200 bg-white">
+        <div className="flex items-center justify-end px-8 py-4 bg-transparent absolute bottom-6 right-6 z-30">
           <ResumeDownloadButton data={resumeData} />
         </div>
 

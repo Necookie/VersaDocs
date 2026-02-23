@@ -25,7 +25,7 @@ export default function Navbar() {
           {/* Only show "Sign In" and "Get Started" buttons if the user is logged out */}
           <SignedOut>
             <SignInButton mode="modal">
-              <button className="font-bold hover:text-blue-600">Sign in</button>
+              <button className="font-bold hover:text-zinc-600">Sign in</button>
             </SignInButton>
             <Button asChild>
               <Link href="/sign-up">Get Started</Link>

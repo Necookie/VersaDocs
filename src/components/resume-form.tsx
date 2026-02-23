@@ -136,7 +136,7 @@ export function ResumeForm({ onUpdate, defaultData }: ResumeFormProps) {
           </AccordionItem>
 
           {/* BIODATA INFO SECTION */}
-          <AccordionItem value="biodata-info" className="shadow-md rounded-md p-4 border-l-4 border-blue-500">
+          <AccordionItem value="biodata-info" className="shadow-md rounded-md p-4 border-l-4 border-primary">
             <AccordionTrigger>Biodata Details</AccordionTrigger>
             <AccordionContent>
               <BiodataInfoForm form={form} />
@@ -144,7 +144,7 @@ export function ResumeForm({ onUpdate, defaultData }: ResumeFormProps) {
           </AccordionItem>
 
           {/* CHARACTER REFERENCES SECTION */}
-          <AccordionItem value="character-references" className="shadow-md rounded-md p-4 border-l-4 border-blue-500">
+          <AccordionItem value="character-references" className="shadow-md rounded-md p-4 border-l-4 border-primary">
             <AccordionTrigger>Character References (Biodata)</AccordionTrigger>
             <AccordionContent>
               <CharacterReferencesForm form={form} />

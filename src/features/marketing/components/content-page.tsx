@@ -12,7 +12,7 @@ export function ContentPage({ page, notice }: ContentPageProps) {
     <main className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-slate-100 px-4 py-24">
       <section className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-xl shadow-slate-900/5 md:p-12">
         {page.badge ? (
-          <p className="mb-4 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-800">
+          <p className="mb-4 inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-800">
             {page.badge}
           </p>
         ) : null}
@@ -24,7 +24,7 @@ export function ContentPage({ page, notice }: ContentPageProps) {
         </p>
 
         {notice ? (
-          <div className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm font-medium text-blue-900">
+          <div className="mt-6 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm font-medium text-zinc-900">
             {notice}
           </div>
         ) : null}

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
  * Props mapping for the Character References sub-form.
  */
 interface CharacterReferencesFormProps {
-    form: UseFormReturn<any>;
+    form: UseFormReturn<ResumeValues>;
 }
 
 /**

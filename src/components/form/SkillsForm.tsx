@@ -1,15 +1,15 @@
 "use client";
 
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ResumeValues } from "@/lib/schemas/resume";
 
 /**
  * Props for the SkillsForm component.
  */
 interface SkillsFormProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any; // Standard React Hook Form control instance
+  form: UseFormReturn<ResumeValues>;
 }
 
 /**

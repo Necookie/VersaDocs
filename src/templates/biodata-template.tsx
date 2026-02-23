@@ -1,4 +1,4 @@
-import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { ResumeValues } from '@/lib/schemas/resume';
 
 /**
@@ -123,13 +123,13 @@ export default function BiodataTemplate({ data }: TemplateProps) {
                         <Text style={styles.label}>Citizenship</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.citizenship || ""}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Father's Name</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.fathersName || ""}</Text>
+                        <Text style={styles.label}>Father&apos;s Name</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.fathersName || ""}</Text>
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.label}>Occupation</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.fathersOccupation || ""}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Mother's Name</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.mothersName || ""}</Text>
+                        <Text style={styles.label}>Mother&apos;s Name</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.mothersName || ""}</Text>
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.label}>Occupation</Text><Text style={styles.colon}>:</Text><Text style={styles.value}>{data.personalInfo.mothersOccupation || ""}</Text>

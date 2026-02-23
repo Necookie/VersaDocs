@@ -1,4 +1,5 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
+import { publicRouteMatcher } from "@/features/auth/public-routes";
 
 /**
  * Define which routes are "Public" (Anyone can see them without authentication).
@@ -7,16 +8,8 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
  * - `/sign-up(.*)`: Sign up page and its subroutes
  * - `/api/webhooks(.*)`: Clerk webhook ingestion endpoint
  */
-const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/api/webhooks(.*)']);
-
-/**
- * Main Clerk authentication middleware hook.
- * Executes on every request to determine access rules.
- */
 export default clerkMiddleware(async (auth, request) => {
-  // If the user tries to access a route that IS NOT listed in `isPublicRoute` (e.g. `/editor`),
-  // intercept the request and redirect them to the Clerk Sign-In portal.
-  if (!isPublicRoute(request)) {
+  if (!publicRouteMatcher(request)) {
     await auth.protect();
   }
 });

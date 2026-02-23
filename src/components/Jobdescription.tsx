@@ -1,8 +1,15 @@
 import { ResumeValues } from "@/lib/schemas/resume";
-import { Control, useFieldArray, useFormContext } from "react-hook-form";
+import {
+  Control,
+  FieldValues,
+  UseFormReturn,
+  useFieldArray,
+} from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+type ExperienceDescriptionItemPath = `experience.${number}.description.${number}`;
 
 /**
  * Props for JobDescription component.
@@ -13,21 +20,21 @@ interface JobDescriptionProps {
      */
     JobIndex: number;
     /** 
-     * The `control` object from React Hook Form
+     * The React Hook Form API object.
      */
-    control: Control<ResumeValues>;
+    form: UseFormReturn<ResumeValues>;
 }
 
 /**
  * Component that manages a dynamic array of bullet points (Key Achievements) for a job entry.
  * Note: Despite the original name `Jobdescription`, it powers the `experience` array's descriptions.
  */
-export function JobDescription({ JobIndex, control }: JobDescriptionProps) {
-    // 1. Initialize the field array targeting the nested description array within the experience array
+export function JobDescription({ JobIndex, form }: JobDescriptionProps) {
+    const nestedControl = form.control as unknown as Control<FieldValues>;
     const { fields: descriptionFields, append: appendDescription, remove: removeDescription } = useFieldArray({
-        control,
-        name: `experience.${JobIndex}.description` as never,
-    })
+      control: nestedControl,
+      name: `experience.${JobIndex}.description`,
+    });
 
     return (
         <main>
@@ -40,7 +47,12 @@ export function JobDescription({ JobIndex, control }: JobDescriptionProps) {
             {/* 2. Map existing bullet points to input fields */}
             {descriptionFields.map((desc, descIndex) => (
                 <div key={desc.id} className='flex items-center gap-2 mt-1'>
-                    <Input {...control.register(`experience.${JobIndex}.description.${descIndex}` as never)} placeholder='Describe your achievement' />
+                    <Input
+                      {...form.register(
+                        `experience.${JobIndex}.description.${descIndex}` as ExperienceDescriptionItemPath
+                      )}
+                      placeholder='Describe your achievement'
+                    />
                     <Button
                         type="button"
                         variant="ghost"

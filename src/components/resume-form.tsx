@@ -1,6 +1,6 @@
 "use client"; // Tells Next.js: "This runs in the browser, not the server"
 
-import { useForm, useWatch } from "react-hook-form";
+import { Resolver, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,8 @@ import {
   BiodataInfoForm,
   CharacterReferencesForm,
 } from "@/components/form";
-
-const STORAGE_KEY = "versadocs-resume-data";
+import { RESUME_STORAGE_KEY } from "@/features/resume-editor/constants/storage";
+import { createEmptyResume } from "@/lib/schemas/resume";
 
 /**
  * Props for the main ResumeForm layout.
@@ -40,8 +40,8 @@ interface ResumeFormProps {
  */
 export function ResumeForm({ onUpdate, defaultData }: ResumeFormProps) {
   // 1. Setup the form using React Hook Form & Zod for schema validation
-  const form = useForm({
-    resolver: zodResolver(resumeSchema) as unknown as ReturnType<typeof zodResolver>,
+  const form = useForm<ResumeValues>({
+    resolver: zodResolver(resumeSchema) as Resolver<ResumeValues>,
     defaultValues: defaultData,
   });
 
@@ -61,48 +61,20 @@ export function ResumeForm({ onUpdate, defaultData }: ResumeFormProps) {
   /**
    * Handler for explicit save clicks
    */
-  function onSubmit(data: any) {
+  function onSubmit(data: ResumeValues) {
     console.log("Form Submitted:", data);
-    onUpdate(data as ResumeValues);
+    onUpdate(data);
   }
 
   /**
    * Resets the entire form schema and clears local storage caches.
    */
   function clearAll() {
-    const empty: ResumeValues = {
-      templateId: "formal",
-      personalInfo: {
-        fullName: "",
-        email: "",
-        phone: undefined,
-        location: "",
-        summary: "",
-        linkedin: "",
-        website: "",
-        age: "",
-        dateOfBirth: "",
-        placeOfBirth: "",
-        civilStatus: "",
-        religion: "",
-        height: "",
-        weight: "",
-        citizenship: "",
-        fathersName: "",
-        fathersOccupation: "",
-        mothersName: "",
-        mothersOccupation: "",
-      },
-      experience: [],
-      skills: [],
-      education: [],
-      projects: [],
-      characterReferences: [],
-    };
+    const empty = createEmptyResume();
 
     form.reset(empty);
     try {
-      if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
+      if (typeof window !== "undefined") localStorage.removeItem(RESUME_STORAGE_KEY);
     } catch (e) {
       console.error("Failed to clear storage", e);
     }

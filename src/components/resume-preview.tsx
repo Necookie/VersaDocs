@@ -2,8 +2,7 @@
 
 import { PDFViewer } from "@react-pdf/renderer"
 import { ResumeValues } from "@/lib/schemas/resume"
-import FormalTemplate from "@/templates/formal-template"
-import BiodataTemplate from "@/templates/biodata-template"
+import { getTemplateDocument } from "@/features/resume-editor/pdf/template-registry"
 
 /**
  * Props for ResumePreview component
@@ -32,12 +31,7 @@ export default function ResumePreview({ resumeData }: ResumePreviewProps) {
                 className="w-full h-full border-0"
                 showToolbar={false}
             >
-                {/* Renders the specific customized React-PDF layout based on user selection */}
-                {resumeData.templateId === "biodata" ? (
-                    <BiodataTemplate data={resumeData} />
-                ) : (
-                    <FormalTemplate data={resumeData} />
-                )}
+                {getTemplateDocument({ data: resumeData })}
             </PDFViewer>
         </div>
     )

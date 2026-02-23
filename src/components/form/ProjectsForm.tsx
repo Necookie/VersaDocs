@@ -1,16 +1,16 @@
 "use client";
 
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ProjectDescription } from "@/components/ProjectDescription";
+import { ResumeValues } from "@/lib/schemas/resume";
 
 /**
  * Props for the ProjectsForm component.
  */
 interface ProjectsFormProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any; // Standard React Hook Form control instance
+  form: UseFormReturn<ResumeValues>;
 }
 
 /**
@@ -73,7 +73,7 @@ export function ProjectsForm({ form }: ProjectsFormProps) {
           </div>
 
           {/* PROJECT DESCRIPTION (Nested Field Array for Bullet Points) */}
-          <ProjectDescription ProjectIndex={index} control={form.control as never} />
+          <ProjectDescription ProjectIndex={index} form={form} />
 
           {/* Delete button specific to this project block */}
           <Button variant="outline" type="button" onClick={() => removeProject(index)}>

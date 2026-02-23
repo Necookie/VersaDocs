@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
  * Props for the Biodata Information form sub-section.
  */
 interface BiodataInfoFormProps {
-    form: UseFormReturn<any>;
+    form: UseFormReturn<ResumeValues>;
 }
 
 /**
@@ -66,25 +66,25 @@ export function BiodataInfoForm({ form }: BiodataInfoFormProps) {
 
             {/* Father's Name */}
             <div className="space-y-2">
-                <label className="text-sm font-medium">Father's Name</label>
+                <label className="text-sm font-medium">Father&apos;s Name</label>
                 <Input {...form.register("personalInfo.fathersName")} placeholder="e.g., Juan Dela Cruz Sr." />
             </div>
 
             {/* Father's Occupation */}
             <div className="space-y-2">
-                <label className="text-sm font-medium">Father's Occupation</label>
+                <label className="text-sm font-medium">Father&apos;s Occupation</label>
                 <Input {...form.register("personalInfo.fathersOccupation")} placeholder="e.g., Engineer" />
             </div>
 
             {/* Mother's Name */}
             <div className="space-y-2">
-                <label className="text-sm font-medium">Mother's Name</label>
+                <label className="text-sm font-medium">Mother&apos;s Name</label>
                 <Input {...form.register("personalInfo.mothersName")} placeholder="e.g., Maria Dela Cruz" />
             </div>
 
             {/* Mother's Occupation */}
             <div className="space-y-2">
-                <label className="text-sm font-medium">Mother's Occupation</label>
+                <label className="text-sm font-medium">Mother&apos;s Occupation</label>
                 <Input {...form.register("personalInfo.mothersOccupation")} placeholder="e.g., Teacher" />
             </div>
         </div>

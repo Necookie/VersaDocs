@@ -1,13 +1,14 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { ResumeValues } from "@/lib/schemas/resume";
+import { UseFormReturn } from "react-hook-form";
 
 /**
  * Props for the PersonalInfoForm component.
  */
 interface PersonalInfoFormProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any; // Standard React Hook Form control instance
+  form: UseFormReturn<ResumeValues>;
 }
 
 /**

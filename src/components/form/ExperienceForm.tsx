@@ -1,16 +1,16 @@
 "use client";
 
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { JobDescription } from "@/components/Jobdescription";
+import { ResumeValues } from "@/lib/schemas/resume";
 
 /**
  * Props for the ExperienceForm component.
  */
 interface ExperienceFormProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: any; // Standard React Hook Form control instance
+  form: UseFormReturn<ResumeValues>;
 }
 
 /**
@@ -105,7 +105,7 @@ export function ExperienceForm({ form }: ExperienceFormProps) {
 
           {/* JOB DESCRIPTION (Nested Field Array for Bullet Points) */}
           <div className="space-y-2">
-            <JobDescription JobIndex={index} control={form.control as never} />
+            <JobDescription JobIndex={index} form={form} />
 
             {/* Delete button specific to this experience block */}
             <Button

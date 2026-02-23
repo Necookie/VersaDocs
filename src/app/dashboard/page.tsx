@@ -60,7 +60,7 @@ export default async function DashboardPage() {
                             </div>
                             <h3 className="text-xl font-semibold text-slate-900 mb-2">No resumes yet</h3>
                             <p className="text-slate-500 max-w-sm mx-auto mb-8">
-                                You haven't built any resumes. Create your first document to stand out from the crowd!
+                                You haven&apos;t built any resumes. Create your first document to stand out from the crowd!
                             </p>
                             <Button asChild>
                                 <Link href="/editor">Start Building Now</Link>

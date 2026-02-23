@@ -1,8 +1,15 @@
 import { ResumeValues } from "@/lib/schemas/resume";
-import { Control, useFieldArray } from "react-hook-form";
+import {
+  Control,
+  FieldValues,
+  UseFormReturn,
+  useFieldArray,
+} from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+type EducationDescriptionItemPath = `education.${number}.description.${number}`;
 
 /**
  * Props for EducationDescription component.
@@ -13,21 +20,21 @@ interface EducationDescriptionProps {
      */
     EducationIndex: number;
     /** 
-     * The `control` object from React Hook Form, used to manage field arrays
+     * The React Hook Form API object.
      */
-    control: Control<ResumeValues>;
+    form: UseFormReturn<ResumeValues>;
 }
 
 /**
  * Component that manages a dynamic array of bullet points (Key Points) for a specific education entry.
  * Utilizes `useFieldArray` to allow users to add or remove individual bullet points.
  */
-export function EducationDescription({ EducationIndex, control }: EducationDescriptionProps) {
+export function EducationDescription({ EducationIndex, form }: EducationDescriptionProps) {
     // 1. Initialize the field array for the specific education's description array
+    const nestedControl = form.control as unknown as Control<FieldValues>;
     const { fields: descriptionFields, append: appendDescription, remove: removeDescription } = useFieldArray({
-        control,
-        // The cast to `never` handles complex nested typing within React Hook Form
-        name: `education.${EducationIndex}.description` as never,
+        control: nestedControl,
+        name: `education.${EducationIndex}.description`,
     });
 
     return (
@@ -41,7 +48,12 @@ export function EducationDescription({ EducationIndex, control }: EducationDescr
             {/* 2. Map through the current bullet points and render input fields */}
             {descriptionFields.map((desc, descIndex) => (
                 <div key={desc.id} className='flex items-center gap-2 mt-1'>
-                    <Input {...control.register(`education.${EducationIndex}.description.${descIndex}` as never)} placeholder='Describe this point' />
+                    <Input
+                      {...form.register(
+                        `education.${EducationIndex}.description.${descIndex}` as EducationDescriptionItemPath
+                      )}
+                      placeholder='Describe this point'
+                    />
 
                     {/* Delete button for removing a specific bullet point */}
                     <Button

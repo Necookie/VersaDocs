@@ -6,7 +6,6 @@ type MarketingPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const runtime = "edge";
 export const dynamicParams = false;
 
 export function generateStaticParams() {

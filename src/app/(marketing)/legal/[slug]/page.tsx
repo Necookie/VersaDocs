@@ -9,7 +9,6 @@ type LegalPageProps = {
 const DEVELOPMENT_NOTICE =
   "VersaDocs is currently under active development and is not yet a public production service. Legal content on this page is temporary and will be replaced before launch.";
 
-export const runtime = "edge";
 export const dynamicParams = false;
 
 export function generateStaticParams() {

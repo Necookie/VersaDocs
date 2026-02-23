@@ -1,6 +1,7 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { signedInNavbarLinks } from "@/features/marketing/navigation/links";
 
 /**
  * Standard global Navbar component for the application.
@@ -33,9 +34,15 @@ export default function Navbar() {
 
           {/* Only show robust navigation and the User Avatar Menu if the user is authenticated */}
           <SignedIn>
-            <Link href="/templates" className="text-gray-600 hover:text-black">Templates</Link>
-            <Link href="/Pricing" className="text-gray-600 hover:text-black">Upgrade</Link>
-            <Link href="/dashboard" className="text-gray-600 font-medium hover:text-indigo-600 transition-colors">Dashboard</Link>
+            {signedInNavbarLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-gray-600 hover:text-black"
+              >
+                {link.label}
+              </Link>
+            ))}
             <UserButton />
           </SignedIn>
         </div>

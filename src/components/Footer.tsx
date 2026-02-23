@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { FileText } from 'lucide-react'
-import Link from 'next/link'
-import { SignedIn, SignedOut } from '@clerk/nextjs'
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { footerLinkGroups } from "@/features/marketing/navigation/links";
+import { FileText } from "lucide-react";
+import Link from "next/link";
 
 /**
  * Standard global Footer component used across the application.
@@ -20,7 +21,11 @@ export default function Footer() {
             <p className="text-lg text-white/90 mb-8">
               Join thousands of job seekers who landed their dream job
             </p>
-            <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-8 transition-all hover:scale-105 active:scale-95 h-12 rounded-full">
+            <Button
+              asChild
+              size="lg"
+              className="bg-white text-gray-900 hover:bg-gray-100 px-8 transition-all hover:scale-105 active:scale-95 h-12 rounded-full"
+            >
               <Link href="/editor">Start Building Now - It&apos;s Free</Link>
             </Button>
           </div>
@@ -42,16 +47,27 @@ export default function Footer() {
               Welcome Back
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight">
-              Continue Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Career Journey</span>
+              Continue Your{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                Career Journey
+              </span>
             </h2>
             <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
               Your next big opportunity is just around the corner. Keep your resume polished and stay ready for what&apos;s next.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Button asChild size="lg" className="bg-indigo-600 text-white hover:bg-indigo-700 px-8 h-12 md:h-14 md:px-10 rounded-full w-full sm:w-auto shadow-lg shadow-indigo-500/25 transition-all hover:scale-105 active:scale-95 text-base md:text-lg">
+              <Button
+                asChild
+                size="lg"
+                className="bg-indigo-600 text-white hover:bg-indigo-700 px-8 h-12 md:h-14 md:px-10 rounded-full w-full sm:w-auto shadow-lg shadow-indigo-500/25 transition-all hover:scale-105 active:scale-95 text-base md:text-lg"
+              >
                 <Link href="/dashboard">Go to Dashboard</Link>
               </Button>
-              <Button asChild size="lg" className="bg-white/5 text-white border border-white/10 hover:bg-white/10 px-8 h-12 md:h-14 md:px-10 rounded-full w-full sm:w-auto transition-all hover:scale-105 active:scale-95 backdrop-blur-sm text-base md:text-lg">
+              <Button
+                asChild
+                size="lg"
+                className="bg-white/5 text-white border border-white/10 hover:bg-white/10 px-8 h-12 md:h-14 md:px-10 rounded-full w-full sm:w-auto transition-all hover:scale-105 active:scale-95 backdrop-blur-sm text-base md:text-lg"
+              >
                 <Link href="/editor">Open Editor</Link>
               </Button>
             </div>
@@ -69,66 +85,37 @@ export default function Footer() {
                 <FileText className="size-6 text-white" />
                 <span className="text-xl font-semibold text-white">VersaDocs</span>
               </div>
-              <p className="text-gray-400">
-                Build professional resumes in minutes
+              <p className="text-gray-400">Build professional resumes in minutes</p>
+              <p className="mt-3 inline-flex rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-200">
+                Project currently in development
               </p>
             </div>
 
-            {/* Product Navigation Links */}
-            <div>
-              <h3 className="text-white font-semibold mb-4">Product</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Features</Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Templates</Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Pricing</Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Company Navigation Links */}
-            <div>
-              <h3 className="text-white font-semibold mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">About</Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Blog</Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Careers</Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Legal Links */}
-            <div>
-              <h3 className="text-white font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Terms</Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">Security</Link>
-                </li>
-              </ul>
-            </div>
+            {footerLinkGroups.map((group) => (
+              <div key={group.title}>
+                <h3 className="text-white font-semibold mb-4">{group.title}</h3>
+                <ul className="space-y-2">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="hover:text-white transition-colors">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
           {/* Copyright text */}
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>© 2026 VersaDocs. All rights reserved.</p>
+            <p>&copy; 2026 VersaDocs. All rights reserved.</p>
+            <p className="mt-2 text-xs text-gray-500">
+              Legal documents are temporary while the service remains in development.
+            </p>
           </div>
         </div>
       </section>
     </footer>
-  )
+  );
 }

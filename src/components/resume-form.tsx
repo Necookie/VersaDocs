@@ -4,7 +4,7 @@ import { Resolver, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema, type ResumeValues } from "@/lib/schemas/resume";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect } from "react";
 import {
   PersonalInfoForm,
@@ -92,66 +92,54 @@ export function ResumeForm({ onUpdate, defaultData }: ResumeFormProps) {
           </Button>
         </div>
 
-        {/* Fillable Form Sections inside Accordions */}
-        <Accordion type="multiple" defaultValue={["personal-info"]}>
+        {/* Fillable Form Sections inside Tabs */}
+        <Tabs defaultValue="personal-info" className="w-full">
+          <TabsList className="flex flex-wrap h-auto gap-2 p-2 justify-start mb-4 bg-muted/50 rounded-lg">
+            <TabsTrigger value="personal-info">Personal Info</TabsTrigger>
+            <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="skills">Skills</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="biodata-info">Biodata Details</TabsTrigger>
+            <TabsTrigger value="character-references">References</TabsTrigger>
+          </TabsList>
 
           {/* PERSONAL INFO SECTION */}
-          <AccordionItem value="personal-info" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Personal Info</AccordionTrigger>
-            <AccordionContent>
-              <PersonalInfoForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="personal-info" className="shadow-md rounded-md p-4 bg-card border">
+            <PersonalInfoForm form={form} />
+          </TabsContent>
 
           {/* EXPERIENCE SECTION */}
-          <AccordionItem value="experience" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Experience</AccordionTrigger>
-            <AccordionContent>
-              <ExperienceForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="experience" className="shadow-md rounded-md p-4 bg-card border">
+            <ExperienceForm form={form} />
+          </TabsContent>
 
           {/* SKILLS SECTION */}
-          <AccordionItem value="skills" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Skills</AccordionTrigger>
-            <AccordionContent>
-              <SkillsForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="skills" className="shadow-md rounded-md p-4 bg-card border">
+            <SkillsForm form={form} />
+          </TabsContent>
 
           {/* EDUCATION SECTION */}
-          <AccordionItem value="education" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Education</AccordionTrigger>
-            <AccordionContent>
-              <EducationForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="education" className="shadow-md rounded-md p-4 bg-card border">
+            <EducationForm form={form} />
+          </TabsContent>
 
           {/* PROJECTS SECTION */}
-          <AccordionItem value="projects" className="shadow-md rounded-md p-4">
-            <AccordionTrigger>Projects</AccordionTrigger>
-            <AccordionContent>
-              <ProjectsForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="projects" className="shadow-md rounded-md p-4 bg-card border">
+            <ProjectsForm form={form} />
+          </TabsContent>
 
           {/* BIODATA INFO SECTION */}
-          <AccordionItem value="biodata-info" className="shadow-md rounded-md p-4 border-l-4 border-primary">
-            <AccordionTrigger>Biodata Details</AccordionTrigger>
-            <AccordionContent>
-              <BiodataInfoForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="biodata-info" className="shadow-md rounded-md p-4 border-l-4 border-primary bg-card">
+            <BiodataInfoForm form={form} />
+          </TabsContent>
 
           {/* CHARACTER REFERENCES SECTION */}
-          <AccordionItem value="character-references" className="shadow-md rounded-md p-4 border-l-4 border-primary">
-            <AccordionTrigger>Character References (Biodata)</AccordionTrigger>
-            <AccordionContent>
-              <CharacterReferencesForm form={form} />
-            </AccordionContent>
-          </AccordionItem>
+          <TabsContent value="character-references" className="shadow-md rounded-md p-4 border-l-4 border-primary bg-card">
+            <CharacterReferencesForm form={form} />
+          </TabsContent>
 
-        </Accordion>
+        </Tabs>
 
         {/* Save Button */}
         <Button onClick={form.handleSubmit(onSubmit)}>Save Resume</Button>

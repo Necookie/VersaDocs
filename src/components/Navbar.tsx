@@ -12,9 +12,11 @@ export default function Navbar() {
       <nav className="flex justify-between items-center px-6 py-4 w-full max-w-6xl rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md shadow-lg shadow-black/5 z-50 transition-all">
         {/* Brand / Logo */}
         <div className="flex gap-2">
-          <p className="text-2xl font-bold tracking-tight bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            VersaDocs
-          </p>
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <p className="text-2xl font-bold tracking-tight bg-gradient-to-br from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              VersaDocs
+            </p>
+          </Link>
         </div>
 
         {/* Navigation Links & Authentication Controls */}

@@ -32,7 +32,10 @@ const ResumeDownloadButton = dynamic(
 export function EditorWorkspace() {
   const resumeData = useResumeStore((state) => state.resumeData);
   const setResumeData = useResumeStore((state) => state.setResumeData);
-  const debouncedResumeData = useDebounce(resumeData, 1000);
+
+  // Increased to 1200ms to eliminate flickering while typing
+  const debouncedPreviewData = useDebounce(resumeData, 1200);
+  const debouncedResumeData = useDebounce(resumeData, 1200);
 
   useEffect(() => {
     localStorage.setItem(RESUME_STORAGE_KEY, JSON.stringify(debouncedResumeData));
@@ -46,57 +49,66 @@ export function EditorWorkspace() {
   };
 
   return (
-    <main className="flex h-[100dvh] w-full overflow-hidden bg-[#F8FAFC]">
-      <section className="w-1/2 h-full bg-white overflow-y-auto scrollbar-thin shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10 relative">
-        <div className="p-8 max-w-2xl mx-auto">
-          <div className="flex items-center mb-8">
-            <Link href="/" className="mr-4 text-slate-500 hover:text-slate-900 transition-colors">
-              <ChevronLeft size={24} />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900">Editor</h1>
-              <p className="text-sm text-slate-500">Fill in your details to generate the PDF.</p>
-            </div>
+    <main className="flex flex-col h-[100dvh] w-full overflow-hidden bg-[#F8FAFC]">
+      {/* UNIFIED TOP NAVBAR */}
+      <nav className="h-16 shrink-0 bg-white border-b border-slate-200/60 flex items-center justify-between px-6 shadow-sm z-50">
+        {/* Left Nav (Branding & Back Navigation) */}
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+            <ChevronLeft size={20} />
+          </Link>
+          <div className="flex flex-col">
+            <h1 className="text-lg font-bold tracking-tight text-slate-900 leading-tight">VersaDocs Editor</h1>
+            <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Fill in details to generate PDF</p>
           </div>
-          <ResumeForm onUpdate={setResumeData} defaultData={resumeData} />
         </div>
-      </section>
 
-      <section className="w-1/2 h-full flex flex-col bg-slate-100/50">
-        <div className="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 flex items-center justify-between px-8 shadow-sm z-20 sticky top-0">
-          <div className="flex items-center gap-3">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100">
-              <span className="h-2 w-2 rounded-full bg-indigo-600 animate-pulse"></span>
+        {/* Right Nav (Preview Controls) */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100">
+              <span className="h-1.5 w-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
             </span>
-            <span className="font-semibold text-slate-700 tracking-tight">Live Preview Canvas</span>
+            <span className="text-sm font-semibold text-slate-700 tracking-tight hidden sm:block">Live Preview</span>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center bg-slate-100 rounded-lg p-1">
-              <span className="text-xs font-medium text-slate-500 px-3">Template:</span>
-              <select
-                value={resumeData.templateId}
-                onChange={handleTemplateChange}
-                className="text-sm font-medium border-none bg-white shadow-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition-all"
-              >
-                <option value="formal">Formal</option>
-                <option value="biodata">Biodata</option>
-              </select>
-            </div>
-            <div className="hidden lg:flex items-center gap-2">
-              <span className="h-4 w-px bg-slate-300"></span>
-              <div className="text-xs font-mono font-medium text-slate-400">A4 Document</div>
-            </div>
+
+          <div className="h-6 w-px bg-slate-200"></div>
+
+          <div className="flex items-center bg-slate-50 rounded-md border border-slate-200/60 p-1">
+            <span className="text-xs font-semibold text-slate-500 px-3 uppercase tracking-wider">Template:</span>
+            <select
+              value={resumeData.templateId}
+              onChange={handleTemplateChange}
+              className="text-sm font-medium border-none bg-white shadow-sm rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition-all"
+            >
+              <option value="formal">Formal</option>
+              <option value="biodata">Biodata</option>
+            </select>
           </div>
         </div>
+      </nav>
 
-        <div className="flex items-center justify-end px-8 py-4 bg-transparent absolute bottom-6 right-6 z-30">
-          <ResumeDownloadButton data={resumeData} />
-        </div>
+      {/* TWO COLUMN WORKSPACE */}
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Left Column: Editor Form */}
+        {/* Applied no-scrollbar to hide the ugly scroll pipeline while keeping it scrubbable */}
+        <section className="w-1/2 h-full bg-white overflow-y-auto no-scrollbar shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10 relative">
+          <div className="p-8 max-w-2xl mx-auto pt-10">
+            <ResumeForm onUpdate={setResumeData} defaultData={resumeData} />
+          </div>
+        </section>
 
-        <div className="flex-1 overflow-hidden p-4 flex items-center justify-center">
-          <ResumePreview resumeData={resumeData} />
-        </div>
-      </section>
+        {/* Right Column: Preview Canvas */}
+        <section className="w-1/2 h-full flex flex-col bg-slate-100/50 p-6 relative">
+          <div className="flex-1 overflow-hidden flex justify-center items-start shadow-xl rounded-lg ring-1 ring-slate-200/50">
+            <ResumePreview resumeData={debouncedPreviewData} />
+          </div>
+
+          <div className="absolute bottom-10 right-10 z-30">
+            <ResumeDownloadButton data={resumeData} />
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

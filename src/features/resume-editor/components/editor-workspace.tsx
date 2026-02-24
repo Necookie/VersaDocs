@@ -14,7 +14,7 @@ const ResumePreview = dynamic(() => import("@/components/resume-preview"), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-full text-slate-400">
-      Loading PDF Engine...
+      Loading Preview...
     </div>
   ),
 });
@@ -33,8 +33,7 @@ export function EditorWorkspace() {
   const resumeData = useResumeStore((state) => state.resumeData);
   const setResumeData = useResumeStore((state) => state.setResumeData);
 
-  // Increased to 1200ms to eliminate flickering while typing
-  const debouncedPreviewData = useDebounce(resumeData, 1200);
+  const debouncedPdfData = useDebounce(resumeData, 800);
   const debouncedResumeData = useDebounce(resumeData, 1200);
 
   useEffect(() => {
@@ -101,11 +100,11 @@ export function EditorWorkspace() {
         {/* Right Column: Preview Canvas */}
         <section className="w-1/2 h-full flex flex-col bg-slate-100/50 p-6 relative">
           <div className="flex-1 overflow-hidden flex justify-center items-start shadow-xl rounded-lg ring-1 ring-slate-200/50">
-            <ResumePreview resumeData={debouncedPreviewData} />
+            <ResumePreview resumeData={resumeData} />
           </div>
 
           <div className="absolute bottom-10 right-10 z-30">
-            <ResumeDownloadButton data={resumeData} />
+            <ResumeDownloadButton data={resumeData} debouncedData={debouncedPdfData} />
           </div>
         </section>
       </div>

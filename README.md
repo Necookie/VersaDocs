@@ -2,6 +2,13 @@
 
 VersaDocs is a Next.js App Router project for building resumes and biodata documents with live PDF preview and PDF export.
 
+## Overview
+
+- Live editor for structured resume/biodata data with immediate visual preview.
+- Multiple templates with a single shared schema (`formal`, `biodata`).
+- Client-side PDF generation using React PDF.
+- Authenticated workspace with a dashboard (mocked data until persistence is wired).
+
 ## Current Functionality
 
 - Landing page at `/` with product messaging and navigation.
@@ -34,7 +41,7 @@ VersaDocs is a Next.js App Router project for building resumes and biodata docum
 - `src/templates`: PDF templates (`formal-template.tsx`, `biodata-template.tsx`).
 - `docs/architecture`: Project conventions and refactor guardrails.
 
-## Setup
+## Local Setup
 
 1. Install dependencies:
 
@@ -80,14 +87,47 @@ npm run dev
   - `/editor`
   - `/dashboard`
 
+## Documentation
+
+- Architecture conventions and guardrails: `docs/architecture/conventions.md`
+- Planned refactors and stability contracts: `docs/architecture/refactor-plan.md`
+
+### Resume Domain Model
+
+- Source of truth: `src/features/resume-editor/schema/resume.ts`
+- Defaults must come from `createEmptyResume()`.
+- Template IDs are stable and currently limited to `formal` and `biodata`.
+- Persisted local storage key is `versadocs-resume-data`.
+
+### Template Rendering
+
+- PDF templates live in `src/templates`.
+- HTML preview templates live in `src/templates/html`.
+- Template resolution is centralized:
+  - PDF: `src/features/resume-editor/pdf/template-registry.tsx`
+  - HTML: `src/features/resume-editor/html/template-registry.tsx`
+
+### Editor Flow
+
+- Form state is driven by React Hook Form + Zod (`useResumeForm`).
+- Preview is rendered from the current in-memory resume state.
+- PDF generation uses `ResumeDownloadButton` and the PDF registry.
+- Autosave uses a debounced local storage write keyed by `RESUME_STORAGE_KEY`.
+
+### Auth and Webhooks
+
+- Clerk auth routes: `/sign-in`, `/sign-up`.
+- Webhook endpoint: `/api/webhooks/clerk`.
+- Current webhook handlers validate signatures and log actions; they do not persist to a database yet.
+
 ## Current Gaps / In Progress
 
 - Dashboard data is mock data; no persistent resume storage is wired yet.
 - Webhook handlers verify and parse events but only log actions (no DB write).
 - Landing page links to `/examples`, and navbar links to `/templates` and `/Pricing`; these routes are not present in `src/app` yet.
 
-## Architecture Notes
+## Contribution Notes
 
-- Resume schema and defaults are centralized in `src/features/resume-editor/schema/resume.ts`.
-- Template rendering is centralized in `src/features/resume-editor/pdf/template-registry.tsx`.
-- Local storage key and template IDs are treated as stability contracts (see `docs/architecture/refactor-plan.md`).
+- Keep template IDs stable and avoid behavioral branching in route pages.
+- Add all new resume defaults via `createEmptyResume()` only.
+- Resolve template components only through the template registries.

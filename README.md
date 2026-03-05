@@ -2,6 +2,12 @@
 
 VersaDocs is a Next.js App Router project for building resumes and biodata documents with live PDF preview and PDF export.
 
+Members:
+Dheyn Michael Orlanda
+Jaypee Javier
+Matthew Dee
+Victor De Mesa Jr.
+
 ## Overview
 
 - Live editor for structured resume/biodata data with immediate visual preview.

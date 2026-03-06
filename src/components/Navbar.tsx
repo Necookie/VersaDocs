@@ -9,8 +9,8 @@ import { signedInNavbarLinks } from "@/features/marketing/navigation/links";
  */
 export default function Navbar() {
   return (
-    <div className="flex justify-center w-full px-4 pt-4">
-      <nav className="flex justify-between items-center px-6 py-4 w-full max-w-6xl rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md shadow-lg shadow-black/5 z-50 transition-all">
+    <div className="flex justify-center w-full px-4 pt-">
+      <nav className="flex justify-between items-center px-90 py-4 w-full  rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md shadow-lg shadow-black/5 z-50 transition-all">
         {/* Brand / Logo */}
         <div className="flex gap-2">
           <Link href="/" className="hover:opacity-80 transition-opacity">

@@ -66,7 +66,7 @@ export const resumeSchema = z.object({
     mothersOccupation: z.string().optional(),
   }),
   summary: z.string().optional(),
-  experience: z.array(experienceSchema).default([]),
+  experience: z.array(experienceSchema).default([]), //put the schema in an array and make the default an empty array
   skills: z.array(skillsSchema).default([]),
   education: z.array(educationSchema).default([]),
   projects: z.array(projectSchema).default([]),

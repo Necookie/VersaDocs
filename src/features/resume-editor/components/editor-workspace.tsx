@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { useEffect } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
-import { useResumeStore } from "@/store/useResumeStore";
+import { useResumeStore } from "@/store/use-resume-store";
 import { RESUME_STORAGE_KEY } from "@/features/resume-editor/constants/storage";
 import { ResumeTemplateId } from "@/lib/schemas/resume";
 import { ResumeForm } from "@/components/resume-form";

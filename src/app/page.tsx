@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <main>
       {/* 1. Navbar Container (Floating) */}
-      <section className='fixed top-0 left-0 w-full z-50 pointer-events-none'>
+      <section className='fixed top-0 left-0 w-full z-50 '>
         <div className="pointer-events-auto">
           <Navbar />
         </div>
@@ -29,7 +29,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto text-center relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out">
 
           <div className="inline-flex items-center gap-2 bg-muted/50 backdrop-blur-sm border px-5 py-2 rounded-full text-sm font-medium text-muted-foreground mb-8">
-            <Sparkles className="size-4" />
+            <Sparkles className="size-4 text-indigo-600" />
             AI-Powered Resume Builder
           </div>
 
@@ -43,7 +43,7 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button asChild size="lg" className="h-14 px-10 text-lg rounded-full shadow-sm transition-transform hover:scale-105 active:scale-95">
+            <Button asChild size="lg" className="h-14 px-10 text-lg rounded-full text-indigo-600 shadow-sm transition-transform hover:scale-105 active:scale-95 ">
               <Link href="/editor">Start Building Free</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="h-14 px-10 text-lg rounded-full shadow-sm transition-transform hover:scale-105 active:scale-95 bg-background">

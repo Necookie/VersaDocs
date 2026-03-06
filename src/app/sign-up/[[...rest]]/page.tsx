@@ -1,5 +1,7 @@
 import { SignUp } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 /**
  * Sign Up Page (`/sign-up`)
  * Renders the Clerk UI for user registration within a centered, styled container.

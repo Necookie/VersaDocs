@@ -1,5 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 /**
  * Sign In Page (`/sign-in`)
  * Renders the Clerk UI for user authentication within a centered, styled container.

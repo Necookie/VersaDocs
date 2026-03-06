@@ -6,6 +6,10 @@ import { CheckIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * A control that allows the user to toggle between checked and not checked.
+ * Built on top of `@radix-ui/react-checkbox`.
+ */
 function Checkbox({
   className,
   ...props

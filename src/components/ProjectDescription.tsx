@@ -1,18 +1,39 @@
 import { ResumeValues } from "@/lib/schemas/resume";
-import { Control, useFieldArray } from "react-hook-form";
+import {
+  Control,
+  FieldValues,
+  UseFormReturn,
+  useFieldArray,
+} from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+type ProjectDescriptionItemPath = `projects.${number}.description.${number}`;
+
+/**
+ * Props for ProjectDescription component.
+ */
 interface ProjectDescriptionProps {
+  /** 
+   * The array index of the specific project entry
+   */
   ProjectIndex: number;
-  control: Control<ResumeValues>;
+  /** 
+   * The React Hook Form API object.
+   */
+  form: UseFormReturn<ResumeValues>;
 }
 
-export function ProjectDescription({ ProjectIndex, control }: ProjectDescriptionProps) {
+/**
+ * Component that manages a dynamic array of bullet points describing a specific project.
+ */
+export function ProjectDescription({ ProjectIndex, form }: ProjectDescriptionProps) {
+  // 1. Provide dynamic mapping to add or remove project description fields
+  const nestedControl = form.control as unknown as Control<FieldValues>;
   const { fields: descriptionFields, append: appendDescription, remove: removeDescription } = useFieldArray({
-    control,
-    name: `projects.${ProjectIndex}.description` as never,
+    control: nestedControl,
+    name: `projects.${ProjectIndex}.description`,
   });
 
   return (
@@ -21,9 +42,15 @@ export function ProjectDescription({ ProjectIndex, control }: ProjectDescription
         <label className="text-sm font-medium">Project Description <span className="text-gray-400 text-xs">(Bullet points)</span></label>
       </div>
 
+      {/* 2. Map existing bullet points into text inputs */}
       {descriptionFields.map((desc, descIndex) => (
         <div key={desc.id} className="flex items-center gap-2 mt-1">
-          <Input {...control.register(`projects.${ProjectIndex}.description.${descIndex}` as never)} placeholder="Describe this point" />
+          <Input
+            {...form.register(
+              `projects.${ProjectIndex}.description.${descIndex}` as ProjectDescriptionItemPath
+            )}
+            placeholder="Describe this point"
+          />
           <Button
             type="button"
             variant="ghost"
@@ -36,6 +63,7 @@ export function ProjectDescription({ ProjectIndex, control }: ProjectDescription
         </div>
       ))}
 
+      {/* 3. Button to append a new bullet point to the project */}
       <Button
         type="button"
         variant="outline"

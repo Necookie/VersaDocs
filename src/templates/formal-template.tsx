@@ -1,8 +1,10 @@
-import {Page, Text, View, Document, StyleSheet} from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { ResumeValues } from '@/lib/schemas/resume';
 
-
-//make styles for the pdf document
+/**
+ * StyleSheet defining the aesthetic properties of the PDF document.
+ * React-PDF uses a subset of CSS mapped to Yoga layout engine properties.
+ */
 const styles = StyleSheet.create({
     page: {
         padding: 40,
@@ -11,7 +13,7 @@ const styles = StyleSheet.create({
         lineHeight: 1.5,
         color: '#333333',
     },
-    //header section
+    // Header Section Styles
     header: {
         marginBottom: 15,
         borderBottomWidth: 1,
@@ -34,11 +36,11 @@ const styles = StyleSheet.create({
         fontSize: 10,
         gap: 5,
         color: '#555555',
-    }, 
+    },
     separator: {
         marginHorizontal: 4,
     },
-    //Section Headers
+    // Section Header Styles
     sectionTitle: {
         fontSize: 10,
         fontFamily: "Helvetica-Bold",
@@ -47,9 +49,9 @@ const styles = StyleSheet.create({
         borderBottomColor: "#000000",
         marginTop: 8,
         marginBottom: 8,
-        paddingBottom: 2,  
+        paddingBottom: 2,
     },
-    //Content Blocks
+    // Content Block Styles (Used for Jobs, Education, and Projects)
     jobBlock: {
         marginBottom: 3,
     },
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
         marginBottom: 2,
     },
     companyName: {
-        fontFamily: "Helvetica-Oblique", // Italic
+        fontFamily: "Helvetica-Oblique", // Italic font variant
         fontSize: 7,
     },
     jobDate: {
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
         textAlign: "right",
     },
     jobRole: {
-        fontFamily: "Helvetica", 
+        fontFamily: "Helvetica",
         fontSize: 11,
         fontWeight: "bold",
     },
@@ -76,9 +78,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         marginTop: 4,
     },
+    // Skills Section Constraints
     skills: {
         fontFamily: "Helvetica-Bold"
     },
+    // Bullet Point Formatting
     bulletPoint: {
         flexDirection: "row",
         marginBottom: 1,
@@ -92,144 +96,161 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 10,
     },
-})
+});
 
+/**
+ * Props for the FormalTemplate component containing the entire populated resume configuration.
+ */
 interface TemplateProps {
     data: ResumeValues;
 }
 
+/**
+ * Functional component rendering a small dot to separate contact elements.
+ */
 const Separator = () => {
     return <Text style={styles.separator}>•</Text>;
 }
-export default function FormalTemplate({data}: TemplateProps) {
+
+/**
+ * FormalTemplate - The core PDF layout for parsing `ResumeValues` into a styled document.
+ * Note: React-PDF requires strict `<Document>`, `<Page>`, `<View>`, and `<Text>` wrappers. 
+ * Standard HTML elements like `<div>` and `<span>` will crash the PDF renderer.
+ */
+export default function FormalTemplate({ data }: TemplateProps) {
+    // Collect contact items into an array, filtering out any empty or null values
     const contactItems = [
         data.personalInfo.phone,
         data.personalInfo.email,
         data.personalInfo.linkedin,
         data.personalInfo.website,
         data.personalInfo.location,
-    ].filter(Boolean); // Remove undefined or empty items
-    
+    ].filter(Boolean);
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-                {/* Header Section */}
+                {/* 1. Header Section: Contains Name and mapped contact links */}
                 <View style={styles.header}>
                     <Text style={styles.name}>{data.personalInfo.fullName}</Text>
                     <View style={styles.contactInfo}>
                         {contactItems.map((item, index) => (
-                            <View key={index} style ={{flexDirection: 'row'}}>
+                            <View key={index} style={{ flexDirection: 'row' }}>
                                 <Text>{item}</Text>
-                                {index < contactItems.length -1 && <Separator />}
+                                {/* Only render separator if it's not the last element */}
+                                {index < contactItems.length - 1 && <Separator />}
                             </View>
                         ))}
                     </View>
                 </View>
-                
-                {/* Summary Section */}
-                <View style ={styles.sectionTitle}>
-                    <Text>Summary</Text>
+
+                {/* 2. Summary Section: Only renders header and content if a summary is provided */}
+                <View style={data.personalInfo.summary ? styles.sectionTitle : undefined}>
+                    <Text>{data.personalInfo.summary ? "Summary" : ""}</Text>
                 </View>
 
                 <Text>{data.personalInfo.summary}</Text>
-                <View style = {styles.jobBlock}></View>
+                <View style={styles.jobBlock}></View>
 
-                 {/* Experience Section */}
-                <View style = {styles.sectionTitle}>
-                    <Text>Experience</Text>
+                {/* 3. Experience Section: Iterates over jobs array to build experience layout */}
+                <View style={data.experience && data.experience.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.experience && data.experience.length ? "Experience" : ""}</Text>
                 </View>
 
-                <View style = {styles.jobHeader}>
+                <View style={styles.jobHeader}>
                     {data.experience.map((job) => (
-                        <View key={job.id} style = {styles.jobBlock}>
+                        <View key={job.id} style={styles.jobBlock}>
                             <View style={styles.jobHeader}>
-                                <View style={{flexDirection: "row", justifyContent: "space-between"}}> 
-                                <Text style={styles.jobRole}>{job.role}</Text>
-                                <Text style={styles.jobDate}>
-                                    {job.startDate} - {job.current ? "Present" : job.endDate || ""}
-                                </Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                    <Text style={styles.jobRole}>{job.role}</Text>
+                                    <Text style={styles.jobDate}>
+                                        {job.startDate} - {job.current ? "Present" : job.endDate || ""}
+                                    </Text>
                                 </View>
                                 <Text style={styles.companyName}>{job.company}</Text>
                             </View>
-                            <View style= {styles.JobDescription}>
+                            <View style={styles.JobDescription}>
                                 {job.description.map((point, index) => (
-                                    <View key = {index} style= {styles.bulletPoint}>
+                                    <View key={index} style={styles.bulletPoint}>
                                         <Text style={styles.bulletDot}>•</Text>
                                         <Text style={styles.bulletText}>{point}</Text>
                                     </View>
                                 ))}
-                           </View>
+                            </View>
                         </View>
                     ))}
                 </View>
-                {/* Education Section */}
-                <View style = {styles.sectionTitle}>
-                    <Text>Education</Text>
+
+                {/* 4. Education Section: Formats academic constraints based on data entries */}
+                <View style={data.education && data.education.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.education && data.education.length ? "Education" : ""}</Text>
                 </View>
 
-                <View style = {styles.jobHeader}>
+                <View style={styles.jobHeader}>
                     {data.education.map((edu) => (
-                        <View key={edu.id} style = {styles.jobBlock}>
+                        <View key={edu.id} style={styles.jobBlock}>
                             <View style={styles.jobHeader}>
-                                <View style={{flexDirection: "row", justifyContent: "space-between"}}> 
-                                <Text style={styles.jobRole}>{edu.degree}</Text>
-                                <Text style={styles.jobDate}>
-                                    {edu.startDate} - {edu.current ? "Present" : edu.endDate || ""}
-                                </Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                    <Text style={styles.jobRole}>{edu.degree}</Text>
+                                    <Text style={styles.jobDate}>
+                                        {edu.startDate} - {edu.current ? "Present" : edu.endDate || ""}
+                                    </Text>
                                 </View>
                                 <Text style={styles.companyName}>{edu.institution}</Text>
                             </View>
-                            <View style= {styles.JobDescription}>
-                               {edu.description.map((point, index) => (
-                                    <View key = {index} style= {styles.bulletPoint}>
+                            <View style={styles.JobDescription}>
+                                {edu.description.map((point, index) => (
+                                    <View key={index} style={styles.bulletPoint}>
                                         <Text style={styles.bulletDot}>•</Text>
                                         <Text style={styles.bulletText}>{point}</Text>
                                     </View>
-                               ))}
-                           </View>
+                                ))}
+                            </View>
                         </View>
                     ))}
                 </View>
-                {/*Skills Section */}
 
-                <View style = {styles.sectionTitle}>
-                    <Text>Skills</Text>
+                {/* 5. Skills Section: Multi-column wrapping wrapper built using flexWrap */}
+                <View style={data.skills && data.skills.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.skills && data.skills.length ? "Skills" : ""}</Text>
                 </View>
-                <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 4,}}>
-                    {data.skills.map((skill, index) => (
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 4, }}>
+                    {data.skills && data.skills.map((skill, index) => (
                         <View key={index} style={{ flexDirection: 'row', width: '30%' }}>
                             <Text style={styles.bulletDot}>•</Text>
                             <Text style={styles.skills}>{skill.skills}</Text>
                         </View>
                     ))}
                 </View>
-                {/* Projects Section */}
-                <View style = {styles.sectionTitle}>
-                    <Text>Projects</Text>
+
+                {/* 6. Projects Section: Formats standalone technical or academic projects */}
+                <View style={data.projects && data.projects.length ? styles.sectionTitle : undefined}>
+                    <Text>{data.projects && data.projects.length ? "Projects" : ""}</Text>
                 </View>
 
-                <View style = {styles.jobHeader}>
+                <View style={styles.jobHeader}>
                     {data.projects.map((project) => (
-                        <View key={project.id} style = {styles.jobBlock}>
+                        <View key={project.id} style={styles.jobBlock}>
                             <View style={styles.jobHeader}>
-                                <View style={{flexDirection: "row",  }}> 
-                                <Text style={styles.jobRole}>{project.title} <Text> | </Text> </Text>
-                                <Text style={styles.jobDate}>{project.startDate}</Text>
+                                <View style={{ flexDirection: "row", }}>
+                                    <Text style={styles.jobRole}>{project.title} <Text> | </Text> </Text>
+                                    <Text style={styles.jobDate}>{project.startDate}</Text>
                                 </View>
                                 <Text style={styles.companyName}>{project.role}</Text>
                             </View>
-                            <View style= {styles.JobDescription}>
+                            <View style={styles.JobDescription}>
                                 {project.description.map((point, index) => (
-                                    <View key = {index} style= {styles.bulletPoint}>
+                                    <View key={index} style={styles.bulletPoint}>
                                         <Text style={styles.bulletDot}>•</Text>
                                         <Text style={styles.bulletText}>{point}</Text>
                                     </View>
                                 ))}
-                           </View>
+                            </View>
                         </View>
                     ))}
                 </View>
+
             </Page>
         </Document>
-    )
+    );
 }

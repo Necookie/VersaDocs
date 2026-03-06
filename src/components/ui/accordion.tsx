@@ -6,12 +6,18 @@ import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Top-level container for an accordion (vertically stacked set of interactive headings).
+ */
 function Accordion({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 
+/**
+ * Individual item of the accordion, containing the trigger heading and the content.
+ */
 function AccordionItem({
   className,
   ...props
@@ -25,6 +31,9 @@ function AccordionItem({
   )
 }
 
+/**
+ * The interactive heading that expands or collapses the accordion item content.
+ */
 function AccordionTrigger({
   className,
   children,
@@ -47,6 +56,9 @@ function AccordionTrigger({
   )
 }
 
+/**
+ * The content panel that is shown or hidden when the trigger is toggled.
+ */
 function AccordionContent({
   className,
   children,

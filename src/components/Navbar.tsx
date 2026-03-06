@@ -28,7 +28,7 @@ export default function Navbar() {
               <button className="font-bold hover:text-zinc-600">Sign in</button>
             </SignInButton>
             <Button asChild>
-              <Link href="/sign-up">Get Started</Link>
+              <Link href="/sign-up" className = 'bg-gray-900 text-white hover:bg-gray-800'>Get Started</Link>
             </Button>
           </SignedOut>
 

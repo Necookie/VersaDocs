@@ -43,7 +43,7 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button asChild size="lg" className="h-14 px-10 text-lg rounded-full text-indigo-600 shadow-sm transition-transform hover:scale-105 active:scale-95 ">
+            <Button asChild size="lg" className="h-14 px-10 text-lg rounded-full hover:text-indigo-600 shadow-sm transition-transform hover:scale-105 active:scale-95 ">
               <Link href="/editor">Start Building Free</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="h-14 px-10 text-lg rounded-full shadow-sm transition-transform hover:scale-105 active:scale-95 bg-background">
